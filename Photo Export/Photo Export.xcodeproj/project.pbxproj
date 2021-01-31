@@ -1,0 +1,590 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65B925C5F6990002D434 /* Photo_ExportApp.swift */; };
+		D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65BB25C5F6990002D434 /* ContentView.swift */; };
+		D88D65BE25C5F69A0002D434 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D88D65BD25C5F69A0002D434 /* Assets.xcassets */; };
+		D88D65C125C5F69A0002D434 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D88D65C025C5F69A0002D434 /* Preview Assets.xcassets */; };
+		D88D65CD25C5F69B0002D434 /* Photo_ExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65CC25C5F69B0002D434 /* Photo_ExportTests.swift */; };
+		D88D65D825C5F69B0002D434 /* Photo_ExportUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65D725C5F69B0002D434 /* Photo_ExportUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D88D65C925C5F69B0002D434 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D88D65AE25C5F6990002D434 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D88D65B525C5F6990002D434;
+			remoteInfo = "Photo Export";
+		};
+		D88D65D425C5F69B0002D434 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D88D65AE25C5F6990002D434 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D88D65B525C5F6990002D434;
+			remoteInfo = "Photo Export";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D88D65B625C5F6990002D434 /* Photo Export.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Photo Export.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D88D65B925C5F6990002D434 /* Photo_ExportApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo_ExportApp.swift; sourceTree = "<group>"; };
+		D88D65BB25C5F6990002D434 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D88D65BD25C5F69A0002D434 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D88D65C025C5F69A0002D434 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D88D65C225C5F69A0002D434 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D88D65C325C5F69A0002D434 /* Photo_Export.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Photo_Export.entitlements; sourceTree = "<group>"; };
+		D88D65C825C5F69B0002D434 /* Photo ExportTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Photo ExportTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D88D65CC25C5F69B0002D434 /* Photo_ExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo_ExportTests.swift; sourceTree = "<group>"; };
+		D88D65CE25C5F69B0002D434 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D88D65D325C5F69B0002D434 /* Photo ExportUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Photo ExportUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D88D65D725C5F69B0002D434 /* Photo_ExportUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo_ExportUITests.swift; sourceTree = "<group>"; };
+		D88D65D925C5F69B0002D434 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D88D65B325C5F6990002D434 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D65C525C5F69B0002D434 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D65D025C5F69B0002D434 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D88D65AD25C5F6990002D434 = {
+			isa = PBXGroup;
+			children = (
+				D88D65B825C5F6990002D434 /* Photo Export */,
+				D88D65CB25C5F69B0002D434 /* Photo ExportTests */,
+				D88D65D625C5F69B0002D434 /* Photo ExportUITests */,
+				D88D65B725C5F6990002D434 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D88D65B725C5F6990002D434 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D88D65B625C5F6990002D434 /* Photo Export.app */,
+				D88D65C825C5F69B0002D434 /* Photo ExportTests.xctest */,
+				D88D65D325C5F69B0002D434 /* Photo ExportUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D88D65B825C5F6990002D434 /* Photo Export */ = {
+			isa = PBXGroup;
+			children = (
+				D88D65B925C5F6990002D434 /* Photo_ExportApp.swift */,
+				D88D65BB25C5F6990002D434 /* ContentView.swift */,
+				D88D65BD25C5F69A0002D434 /* Assets.xcassets */,
+				D88D65C225C5F69A0002D434 /* Info.plist */,
+				D88D65C325C5F69A0002D434 /* Photo_Export.entitlements */,
+				D88D65BF25C5F69A0002D434 /* Preview Content */,
+			);
+			path = "Photo Export";
+			sourceTree = "<group>";
+		};
+		D88D65BF25C5F69A0002D434 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				D88D65C025C5F69A0002D434 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D88D65CB25C5F69B0002D434 /* Photo ExportTests */ = {
+			isa = PBXGroup;
+			children = (
+				D88D65CC25C5F69B0002D434 /* Photo_ExportTests.swift */,
+				D88D65CE25C5F69B0002D434 /* Info.plist */,
+			);
+			path = "Photo ExportTests";
+			sourceTree = "<group>";
+		};
+		D88D65D625C5F69B0002D434 /* Photo ExportUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D88D65D725C5F69B0002D434 /* Photo_ExportUITests.swift */,
+				D88D65D925C5F69B0002D434 /* Info.plist */,
+			);
+			path = "Photo ExportUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D88D65B525C5F6990002D434 /* Photo Export */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D88D65DC25C5F69B0002D434 /* Build configuration list for PBXNativeTarget "Photo Export" */;
+			buildPhases = (
+				D88D65B225C5F6990002D434 /* Sources */,
+				D88D65B325C5F6990002D434 /* Frameworks */,
+				D88D65B425C5F6990002D434 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Photo Export";
+			productName = "Photo Export";
+			productReference = D88D65B625C5F6990002D434 /* Photo Export.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D88D65C725C5F69B0002D434 /* Photo ExportTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D88D65DF25C5F69B0002D434 /* Build configuration list for PBXNativeTarget "Photo ExportTests" */;
+			buildPhases = (
+				D88D65C425C5F69B0002D434 /* Sources */,
+				D88D65C525C5F69B0002D434 /* Frameworks */,
+				D88D65C625C5F69B0002D434 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D88D65CA25C5F69B0002D434 /* PBXTargetDependency */,
+			);
+			name = "Photo ExportTests";
+			productName = "Photo ExportTests";
+			productReference = D88D65C825C5F69B0002D434 /* Photo ExportTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D88D65D225C5F69B0002D434 /* Photo ExportUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D88D65E225C5F69B0002D434 /* Build configuration list for PBXNativeTarget "Photo ExportUITests" */;
+			buildPhases = (
+				D88D65CF25C5F69B0002D434 /* Sources */,
+				D88D65D025C5F69B0002D434 /* Frameworks */,
+				D88D65D125C5F69B0002D434 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D88D65D525C5F69B0002D434 /* PBXTargetDependency */,
+			);
+			name = "Photo ExportUITests";
+			productName = "Photo ExportUITests";
+			productReference = D88D65D325C5F69B0002D434 /* Photo ExportUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D88D65AE25C5F6990002D434 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					D88D65B525C5F6990002D434 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					D88D65C725C5F69B0002D434 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = D88D65B525C5F6990002D434;
+					};
+					D88D65D225C5F69B0002D434 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = D88D65B525C5F6990002D434;
+					};
+				};
+			};
+			buildConfigurationList = D88D65B125C5F6990002D434 /* Build configuration list for PBXProject "Photo Export" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D88D65AD25C5F6990002D434;
+			productRefGroup = D88D65B725C5F6990002D434 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D88D65B525C5F6990002D434 /* Photo Export */,
+				D88D65C725C5F69B0002D434 /* Photo ExportTests */,
+				D88D65D225C5F69B0002D434 /* Photo ExportUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D88D65B425C5F6990002D434 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D88D65C125C5F69A0002D434 /* Preview Assets.xcassets in Resources */,
+				D88D65BE25C5F69A0002D434 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D65C625C5F69B0002D434 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D65D125C5F69B0002D434 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D88D65B225C5F6990002D434 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */,
+				D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D65C425C5F69B0002D434 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D88D65CD25C5F69B0002D434 /* Photo_ExportTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D88D65CF25C5F69B0002D434 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D88D65D825C5F69B0002D434 /* Photo_ExportUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D88D65CA25C5F69B0002D434 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D88D65B525C5F6990002D434 /* Photo Export */;
+			targetProxy = D88D65C925C5F69B0002D434 /* PBXContainerItemProxy */;
+		};
+		D88D65D525C5F69B0002D434 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D88D65B525C5F6990002D434 /* Photo Export */;
+			targetProxy = D88D65D425C5F69B0002D434 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D88D65DA25C5F69B0002D434 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D88D65DB25C5F69B0002D434 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		D88D65DD25C5F69B0002D434 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Photo Export/Photo_Export.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Photo Export/Preview Content\"";
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Photo Export/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.Photo-Export";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		D88D65DE25C5F69B0002D434 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Photo Export/Photo_Export.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Photo Export/Preview Content\"";
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Photo Export/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.Photo-Export";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		D88D65E025C5F69B0002D434 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				INFOPLIST_FILE = "Photo ExportTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.Photo-ExportTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Photo Export.app/Contents/MacOS/Photo Export";
+			};
+			name = Debug;
+		};
+		D88D65E125C5F69B0002D434 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				INFOPLIST_FILE = "Photo ExportTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.Photo-ExportTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Photo Export.app/Contents/MacOS/Photo Export";
+			};
+			name = Release;
+		};
+		D88D65E325C5F69B0002D434 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				INFOPLIST_FILE = "Photo ExportUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.Photo-ExportUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Photo Export";
+			};
+			name = Debug;
+		};
+		D88D65E425C5F69B0002D434 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = S4WXAUZQEV;
+				INFOPLIST_FILE = "Photo ExportUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "uk.co.inseven.Photo-ExportUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Photo Export";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D88D65B125C5F6990002D434 /* Build configuration list for PBXProject "Photo Export" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D88D65DA25C5F69B0002D434 /* Debug */,
+				D88D65DB25C5F69B0002D434 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D88D65DC25C5F69B0002D434 /* Build configuration list for PBXNativeTarget "Photo Export" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D88D65DD25C5F69B0002D434 /* Debug */,
+				D88D65DE25C5F69B0002D434 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D88D65DF25C5F69B0002D434 /* Build configuration list for PBXNativeTarget "Photo ExportTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D88D65E025C5F69B0002D434 /* Debug */,
+				D88D65E125C5F69B0002D434 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D88D65E225C5F69B0002D434 /* Build configuration list for PBXNativeTarget "Photo ExportUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D88D65E325C5F69B0002D434 /* Debug */,
+				D88D65E425C5F69B0002D434 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D88D65AE25C5F6990002D434 /* Project object */;
+}
