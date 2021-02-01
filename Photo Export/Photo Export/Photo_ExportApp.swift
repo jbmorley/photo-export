@@ -58,7 +58,7 @@ class Manager: NSObject, ObservableObject, PHPhotoLibraryChangeObserver, PHPhoto
         PHPhotoLibrary.shared().register(self as PHPhotoLibraryAvailabilityObserver)
 
         let allPhotosOptions = PHFetchOptions()
-        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
         print(allPhotos)
         print(allPhotos.count)
