@@ -8,70 +8,6 @@
 import SwiftUI
 import ImageIO
 import Photos
-import SQLite3
-
-
-func read_title(id: String) -> String? {
-
-    let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
-
-    // open database
-
-    print("opening Photos.sqlite...")
-    var db: OpaquePointer?
-    guard sqlite3_open(libraryUrl.path, &db) == SQLITE_OK else {
-        print("error opening database")
-        sqlite3_close(db)
-        db = nil
-        return nil
-    }
-
-    var statement: OpaquePointer?
-
-    if sqlite3_prepare_v2(db, "select ZADDITIONALASSETATTRIBUTES.ZTITLE from ZASSET JOIN ZADDITIONALASSETATTRIBUTES ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK where ZUUID = ?", -1, &statement, nil) != SQLITE_OK {
-        let errmsg = String(cString: sqlite3_errmsg(db)!)
-        print("error preparing select: \(errmsg)")
-    }
-
-    let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
-
-    print("binding ...")
-    if sqlite3_bind_text(statement, 1, id, -1, SQLITE_TRANSIENT) != SQLITE_OK {
-        let errmsg = String(cString: sqlite3_errmsg(db)!)
-        print("failure binding foo: \(errmsg)")
-    }
-
-    var name: String?
-
-    print("checking data...")
-    while sqlite3_step(statement) == SQLITE_ROW {
-        if let cString = sqlite3_column_text(statement, 0) {
-            name = String(cString: cString)
-            print("name = \(name ?? "?")")
-        } else {
-            print("name not found")
-        }
-    }
-
-    print("finalizing statement...")
-    if sqlite3_finalize(statement) != SQLITE_OK {
-        let errmsg = String(cString: sqlite3_errmsg(db)!)
-        print("error finalizing prepared statement: \(errmsg)")
-    }
-
-    statement = nil
-
-    print("closing database...")
-    if sqlite3_close(db) != SQLITE_OK {
-        print("error closing database")
-    }
-
-    print("closed!!")
-
-    db = nil
-
-    return name
-}
 
 
 struct Thumbnail: View {
@@ -196,14 +132,20 @@ struct ContentView: View {
                             Thumbnail(manager: manager, photo: photo)
                                 .contextMenu(ContextMenu(menuItems: {
                                     Button {
-                                        print(photo.asset.localIdentifier)
-                                        print(photo.asset.localIdentifier.prefix(36))
+                                        let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
+                                        let pictureUrl = picturesUrl.appendingPathComponent("example.jpeg")
+                                        photo.export(to: pictureUrl) { result in
+                                            switch result {
+                                            case .success:
+                                                print("successfully wrote file to \(pictureUrl)")
+                                            case .failure(let error):
+                                                print("failed to safe photo with error \(error)")
+                                            }
+                                        }
 
-                                        let title = read_title(id: String(photo.asset.localIdentifier.prefix(36))) ?? ""
-
-                                        photo.asset.requestContentEditingInput(with: nil) { contentEditingInput, something in
-
-                                            let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
+                                        // TODO: This call is probably not required if we're only doing read-only work.
+//                                        photo.asset.requestContentEditingInput(with: nil) { contentEditingInput, something in
+//
 //
 //                                            let resourceManager = PHAssetResourceManager()
 //                                            let resources = PHAssetResource.assetResources(for: photo.asset)
@@ -223,39 +165,7 @@ struct ContentView: View {
 //                                                }
 //                                            }
 
-                                            // TODO: Consider exporting the original and final versions.
-                                            let options = PHImageRequestOptions()
-                                            options.version = .current
-                                            options.isNetworkAccessAllowed = true
-                                            options.resizeMode = .exact
-
-                                            manager.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) { data, filename, orientation, unknown in
-                                                guard let data = data,
-                                                      let filename = filename,
-                                                      let unknown = unknown else {
-                                                    print("Unable to fetch data")
-                                                    return
-                                                }
-
-                                                print(data.imageProperties ?? "No image properties")
-                                                try! data.write(to: picturesUrl.appendingPathComponent(filename))
-
-                                                guard let image = data.set(title: title) else {
-                                                    print("failed to set title")
-                                                    return
-                                                }
-                                                print(image.imageProperties ?? "no image properties")
-                                                try! image.write(to: picturesUrl.appendingPathComponent("foo.jpeg"))
-
-                                                print(filename)
-                                                print(orientation)
-                                                for (key, _) in unknown {
-                                                    print(key)
-                                                }
-
-                                            }
-
-                                        }
+//                                        }
                                     } label: {
                                         Text("Export...")
                                     }
