@@ -9,6 +9,10 @@ import SwiftUI
 import ImageIO
 import Photos
 
+extension PHObject: Identifiable {
+    public var id: String { localIdentifier }
+}
+
 struct ContentView: View {
 
     @ObservedObject var manager: Manager
@@ -19,7 +23,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                Text("Cheese")
+                ForEach(manager.collections) { collection in
+                    Text(collection.localizedTitle ?? "Untitled")
+                }
             }
             VStack {
                 if manager.requiresAuthorization {

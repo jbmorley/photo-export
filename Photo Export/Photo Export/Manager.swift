@@ -28,6 +28,7 @@ class Manager: NSObject, ObservableObject {
 
     @Published var requiresAuthorization = true
     @Published var photos: [Photo] = []
+    @Published var collections: [PHCollection] = []
 
     let imageManager = PHCachingImageManager()
 
@@ -51,10 +52,17 @@ class Manager: NSObject, ObservableObject {
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
 
+        // Get all the collections.
+        let collectionResult = PHAssetCollection.fetchTopLevelUserCollections(with: nil)
+        collectionResult.enumerateObjects { collection, index, stop in
+            dispatchPrecondition(condition: .onQueue(.main))
+            self.collections.append(collection)
+        }
 
         // TODO: Consider doing this on a different thread.
         var photos: [Photo] = []
         allPhotos.enumerateObjects { asset, index, stop in
+            dispatchPrecondition(condition: .onQueue(.main))
             photos.append(Photo(manager: self, asset: asset))
         }
         self.photos = photos
