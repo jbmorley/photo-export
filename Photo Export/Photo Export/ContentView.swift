@@ -256,10 +256,6 @@ struct ContentView: View {
 //                                                }
 //                                            }
 
-                                            if let data = try? Data.init(contentsOf: picturesUrl.appendingPathComponent("2021-01-28-19-01-34-lantern.jpeg")) {
-                                                print(data.imageProperties)
-                                            }
-
                                             // TODO: Consider exporting the original and final versions.
                                             let options = PHImageRequestOptions()
                                             options.version = .current
