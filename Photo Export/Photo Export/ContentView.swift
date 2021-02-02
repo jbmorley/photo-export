@@ -149,8 +149,26 @@ extension Data {
         var mutableProperties = properties
         if var mutableExif = (properties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any] {
             mutableExif[kCGImagePropertyExifUserComment as String] = title
+            print(kCGImagePropertyExifUserComment)
             mutableProperties[kCGImagePropertyExifDictionary] = mutableExif
         }
+        if var mutableIPTC = (properties[(kCGImagePropertyIPTCDictionary as String)]) as? [AnyHashable: Any] {
+            mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
+            print(kCGImagePropertyIPTCObjectName);
+            mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = title
+            mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
+        } else {
+            var mutableIPTC: [AnyHashable: String] = [:]
+            mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
+            print(kCGImagePropertyIPTCObjectName);
+            mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = title
+            mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
+        }
+        if var mutableTIFF = (properties[(kCGImagePropertyTIFFDictionary as String)]) as? [AnyHashable: Any] {
+            mutableTIFF[kCGImagePropertyTIFFImageDescription as String] = title
+            mutableProperties[kCGImagePropertyTIFFDictionary] = mutableTIFF
+        }
+
 
 //        if exif == nil {
 //            exif = [AnyHashable: Any]()
@@ -175,7 +193,7 @@ extension Data {
 
         let data = NSMutableData()
         let destination: CGImageDestination = CGImageDestinationCreateWithData(data as CFMutableData, uti, 1, nil)!
-        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutableProperties as! CFDictionary)
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutableProperties as CFDictionary)
         CGImageDestinationFinalize(destination)
 
         return data as Data
@@ -265,6 +283,10 @@ struct ContentView: View {
 //                                                    try! resourceData.write(to: picturesUrl.appendingPathComponent(resource.originalFilename))
 //                                                }
 //                                            }
+
+                                            if let data = try? Data.init(contentsOf: picturesUrl.appendingPathComponent("2021-01-28-19-01-34-lantern.jpeg")) {
+                                                print(data.imageProperties)
+                                            }
 
                                             // TODO: Consider exporting the original and final versions.
                                             let options = PHImageRequestOptions()
