@@ -130,21 +130,10 @@ extension Data {
             return nil
         }
 
-
-//        var image = info[UIImagePickerControllerOriginalImage] as! UIImage
-//        let jpeg = UIImageJPEGRepresentation(image, 1.0)
-//        var source: CGImageSource? = nil
-//        source = CGImageSourceCreateWithData((jpeg as CFData?)!, nil)
-
-
         guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [AnyHashable: Any] else {
             print("unable to get properties")
             return nil
         }
-
-//        var mutableProperties = properties
-//        var exif = (mutableProperties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any]
-//        var gps = (mutableProperties[(kCGImagePropertyGPSDictionary as String)]) as? [AnyHashable: Any]
 
         var mutableProperties = properties
         if var mutableExif = (properties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any] {
@@ -168,23 +157,6 @@ extension Data {
             mutableTIFF[kCGImagePropertyTIFFImageDescription as String] = title
             mutableProperties[kCGImagePropertyTIFFDictionary] = mutableTIFF
         }
-
-
-//        if exif == nil {
-//            exif = [AnyHashable: Any]()
-//        }
-//        if gps == nil {
-//            gps = [AnyHashable: Any]()
-//        }
-//
-//        mutableProperties[kCGImagePropertyExifDictionary] = exif
-
-//        gps![(kCGImagePropertyGPSLatitude as String)] = 30.21313
-        //        gps![(kCGImagePropertyGPSLongitude as String)] = 76.22346
-//        exif![kCGImagePropertyExifUserComment as String] = title
-//        exif!["Description"] = title
-//        exif![kCGImagePropertyPNGTitle as String] = title
-//        exif!["Title"] = title
 
         guard let uti = CGImageSourceGetType(imageSource) else {
             print("Unable to determine image source type")
