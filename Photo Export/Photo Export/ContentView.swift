@@ -8,23 +8,69 @@
 import SwiftUI
 import ImageIO
 import Photos
+import SQLite3
 
 
-extension NSImage {
+func read_title(id: String) -> String? {
 
-//    func getExifData() -> CFDictionary? {
-//        var exifData: CFDictionary? = nil
-//        if let data = self.jpegData(compressionQuality: 1.0) {
-//            data.withUnsafeBytes {
-//                let bytes = $0.baseAddress?.assumingMemoryBound(to: UInt8.self)
-//                if let cfData = CFDataCreate(kCFAllocatorDefault, bytes, data.count),
-//                    let source = CGImageSourceCreateWithData(cfData, nil) {
-//                    exifData = CGImageSourceCopyPropertiesAtIndex(source, 0, nil)
-//                }
-//            }
-//        }
-//        return exifData
-//    }
+    let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
+
+    // open database
+
+    print("opening Photos.sqlite...")
+    var db: OpaquePointer?
+    guard sqlite3_open(libraryUrl.path, &db) == SQLITE_OK else {
+        print("error opening database")
+        sqlite3_close(db)
+        db = nil
+        return nil
+    }
+
+    var statement: OpaquePointer?
+
+    if sqlite3_prepare_v2(db, "select ZADDITIONALASSETATTRIBUTES.ZTITLE from ZASSET JOIN ZADDITIONALASSETATTRIBUTES ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK where ZUUID = ?", -1, &statement, nil) != SQLITE_OK {
+        let errmsg = String(cString: sqlite3_errmsg(db)!)
+        print("error preparing select: \(errmsg)")
+    }
+
+    let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+
+    print("binding ...")
+    if sqlite3_bind_text(statement, 1, id, -1, SQLITE_TRANSIENT) != SQLITE_OK {
+        let errmsg = String(cString: sqlite3_errmsg(db)!)
+        print("failure binding foo: \(errmsg)")
+    }
+
+    var name: String?
+
+    print("checking data...")
+    while sqlite3_step(statement) == SQLITE_ROW {
+        if let cString = sqlite3_column_text(statement, 0) {
+            name = String(cString: cString)
+            print("name = \(name ?? "?")")
+        } else {
+            print("name not found")
+        }
+    }
+
+    print("finalizing statement...")
+    if sqlite3_finalize(statement) != SQLITE_OK {
+        let errmsg = String(cString: sqlite3_errmsg(db)!)
+        print("error finalizing prepared statement: \(errmsg)")
+    }
+
+    statement = nil
+
+    print("closing database...")
+    if sqlite3_close(db) != SQLITE_OK {
+        print("error closing database")
+    }
+
+    print("closed!!")
+
+    db = nil
+
+    return name
 }
 
 
@@ -67,12 +113,106 @@ struct Thumbnail: View {
 
 extension Data {
 
-    var imageProperties: [String: Any]? {
-        if let imageSource = CGImageSourceCreateWithData(self as CFData, nil) {
-            return CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any]
-        }
-        return nil
+    var imageSource: CGImageSource? {
+        return CGImageSourceCreateWithData(self as CFData, nil)
     }
+
+    var imageProperties: [String: Any]? {
+        guard let imageSource = imageSource else {
+            return nil
+        }
+        return CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any]
+    }
+
+    func set(title: String) -> Data? {
+
+        guard let imageSource = imageSource else {
+            return nil
+        }
+
+
+//        var image = info[UIImagePickerControllerOriginalImage] as! UIImage
+//        let jpeg = UIImageJPEGRepresentation(image, 1.0)
+//        var source: CGImageSource? = nil
+//        source = CGImageSourceCreateWithData((jpeg as CFData?)!, nil)
+
+
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [AnyHashable: Any] else {
+            print("unable to get properties")
+            return nil
+        }
+
+//        var mutableProperties = properties
+//        var exif = (mutableProperties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any]
+//        var gps = (mutableProperties[(kCGImagePropertyGPSDictionary as String)]) as? [AnyHashable: Any]
+
+        var mutableProperties = properties
+        if var mutableExif = (properties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any] {
+            mutableExif[kCGImagePropertyExifUserComment as String] = title
+            mutableProperties[kCGImagePropertyExifDictionary] = mutableExif
+        }
+
+//        if exif == nil {
+//            exif = [AnyHashable: Any]()
+//        }
+//        if gps == nil {
+//            gps = [AnyHashable: Any]()
+//        }
+//
+//        mutableProperties[kCGImagePropertyExifDictionary] = exif
+
+//        gps![(kCGImagePropertyGPSLatitude as String)] = 30.21313
+        //        gps![(kCGImagePropertyGPSLongitude as String)] = 76.22346
+//        exif![kCGImagePropertyExifUserComment as String] = title
+//        exif!["Description"] = title
+//        exif![kCGImagePropertyPNGTitle as String] = title
+//        exif!["Title"] = title
+
+        guard let uti = CGImageSourceGetType(imageSource) else {
+            print("Unable to determine image source type")
+            return nil
+        }
+
+        let data = NSMutableData()
+        let destination: CGImageDestination = CGImageDestinationCreateWithData(data as CFMutableData, uti, 1, nil)!
+        CGImageDestinationAddImageFromSource(destination, imageSource, 0, mutableProperties as! CFDictionary)
+        CGImageDestinationFinalize(destination)
+
+        return data as Data
+    }
+
+
+//        CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)imagedata, NULL);
+//        CGImageMetadataRef imageMetadataRef = CGImageSourceCopyMetadataAtIndex(source, 0, NULL);
+//        NSArray *metadata = CFBridgingRelease(CGImageMetadataCopyTags(imageMetadataRef));
+//        NSLog(@"metadata = %@", metadata);
+//
+//        for (id aRef in metadata)
+//        {
+//            CGImageMetadataTagRef currentRef = (__bridge CGImageMetadataTagRef)(aRef);
+//            NSLog(@"Ref: %@", currentRef);
+//            CGImageMetadataType type = CGImageMetadataTagGetType(currentRef);
+//            NSLog(@"Type: %d", type);
+//            CFStringRef nameSpace = CGImageMetadataTagCopyNamespace(currentRef);
+//            NSLog(@"NameSpace: %@", nameSpace);
+//            CFStringRef prefix = CGImageMetadataTagCopyPrefix(currentRef);
+//            NSLog(@"prefix: %@", prefix);
+//            CFStringRef name = CGImageMetadataTagCopyName(currentRef);
+//            NSLog(@"name: %@", name);
+//            CFTypeRef value = CGImageMetadataTagCopyValue(currentRef);
+//            NSLog(@"Value: %@", value);
+//
+//            CFStringRef valueTypeStr =  CFCopyTypeIDDescription(CFGetTypeID(value));
+//            NSLog(@"valueTypeStr: %@", valueTypeStr);
+//
+//            //Test related to question
+//            if ([@"GPano" isEqualToString:(__bridge NSString *)prefix] && [@"PoseHeadingDegrees" isEqualToString:(__bridge NSString *)name])
+//            {
+//                NSString *str = (__bridge NSString *)value;
+//                NSLog(@"Str: %@", str);
+//                NSLog(@"Int: %d", [str intValue]);
+//            }
+//        }
 
 }
 
@@ -99,35 +239,38 @@ struct ContentView: View {
                             Thumbnail(manager: manager, photo: photo)
                                 .contextMenu(ContextMenu(menuItems: {
                                     Button {
-                                        print("EXPORTING!")
+                                        print(photo.asset.localIdentifier)
+                                        print(photo.asset.localIdentifier.prefix(36))
+
+                                        let title = read_title(id: String(photo.asset.localIdentifier.prefix(36))) ?? ""
+
                                         photo.asset.requestContentEditingInput(with: nil) { contentEditingInput, something in
+
+                                            let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
+//
+//                                            let resourceManager = PHAssetResourceManager()
+//                                            let resources = PHAssetResource.assetResources(for: photo.asset)
+//                                            print(resources)
+//                                            for resource in resources {
+//                                                var resourceData = Data()
+//                                                let options = PHAssetResourceRequestOptions()
+//                                                resourceManager.requestData(for: resource, options: options) { data in
+//                                                    resourceData.append(data)
+//                                                } completionHandler: { error in
+//                                                    if let error = error {
+//                                                        print("failed to get resource with error \(error)")
+//                                                        return
+//                                                    }
+//                                                    print(resourceData.imageProperties ?? "No image properties")
+//                                                    try! resourceData.write(to: picturesUrl.appendingPathComponent(resource.originalFilename))
+//                                                }
+//                                            }
 
                                             // TODO: Consider exporting the original and final versions.
                                             let options = PHImageRequestOptions()
                                             options.version = .current
                                             options.isNetworkAccessAllowed = true
                                             options.resizeMode = .exact
-
-                                            let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
-
-                                            let resourceManager = PHAssetResourceManager()
-                                            let resources = PHAssetResource.assetResources(for: photo.asset)
-                                            print(resources)
-                                            for resource in resources {
-                                                var resourceData = Data()
-                                                let options = PHAssetResourceRequestOptions()
-                                                resourceManager.requestData(for: resource, options: options) { data in
-                                                    resourceData.append(data)
-                                                } completionHandler: { error in
-                                                    if let error = error {
-                                                        print("failed to get resource with error \(error)")
-                                                        return
-                                                    }
-                                                    print(resourceData.imageProperties ?? "No image properties")
-                                                    try! resourceData.write(to: picturesUrl.appendingPathComponent(resource.originalFilename))
-                                                }
-                                            }
-
 
                                             manager.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) { data, filename, orientation, unknown in
                                                 guard let data = data,
@@ -139,6 +282,13 @@ struct ContentView: View {
 
                                                 print(data.imageProperties ?? "No image properties")
                                                 try! data.write(to: picturesUrl.appendingPathComponent(filename))
+
+                                                guard let image = data.set(title: title) else {
+                                                    print("failed to set title")
+                                                    return
+                                                }
+                                                print(image.imageProperties ?? "no image properties")
+                                                try! image.write(to: picturesUrl.appendingPathComponent("foo.jpeg"))
 
                                                 print(filename)
                                                 print(orientation)
