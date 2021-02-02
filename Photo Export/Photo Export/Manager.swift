@@ -8,25 +8,15 @@
 import Photos
 import SwiftUI
 
-class Manager: NSObject, ObservableObject, PHPhotoLibraryChangeObserver, PHPhotoLibraryAvailabilityObserver {
+class Manager: NSObject, ObservableObject {
 
     @Published var requiresAuthorization = true
     @Published var photos: [Photo] = []
 
     let imageManager = PHCachingImageManager()
 
-    func photoLibraryDidBecomeUnavailable(_ photoLibrary: PHPhotoLibrary) {
-        print("photo library did become unavailable")
-    }
-
-
-    func photoLibraryDidChange(_ changeInstance: PHChange) {
-        print("photo library did change")
-    }
-
     override init() {
         super.init()
-        print(PHPhotoLibrary.authorizationStatus(for: .readWrite))
 
         switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
         case .authorized, .restricted, .limited:
@@ -67,6 +57,23 @@ class Manager: NSObject, ObservableObject, PHPhotoLibraryChangeObserver, PHPhoto
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
             print(status)
         }
+    }
+
+}
+
+
+extension Manager: PHPhotoLibraryChangeObserver {
+
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        print("photo library did change")
+    }
+
+}
+
+extension Manager: PHPhotoLibraryAvailabilityObserver {
+
+    func photoLibraryDidBecomeUnavailable(_ photoLibrary: PHPhotoLibrary) {
+        print("photo library did become unavailable")
     }
 
 }
