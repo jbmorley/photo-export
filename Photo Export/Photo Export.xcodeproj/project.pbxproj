@@ -13,6 +13,7 @@
 		D88D65C125C5F69A0002D434 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D88D65C025C5F69A0002D434 /* Preview Assets.xcassets */; };
 		D88D65CD25C5F69B0002D434 /* Photo_ExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65CC25C5F69B0002D434 /* Photo_ExportTests.swift */; };
 		D88D65D825C5F69B0002D434 /* Photo_ExportUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65D725C5F69B0002D434 /* Photo_ExportUITests.swift */; };
+		D8B327C925C9A98E00E01BA0 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B327C825C9A98E00E01BA0 /* Manager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		D88D65D325C5F69B0002D434 /* Photo ExportUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Photo ExportUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D88D65D725C5F69B0002D434 /* Photo_ExportUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo_ExportUITests.swift; sourceTree = "<group>"; };
 		D88D65D925C5F69B0002D434 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D8B327C825C9A98E00E01BA0 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				D88D65C225C5F69A0002D434 /* Info.plist */,
 				D88D65C325C5F69A0002D434 /* Photo_Export.entitlements */,
 				D88D65BF25C5F69A0002D434 /* Preview Content */,
+				D8B327C825C9A98E00E01BA0 /* Manager.swift */,
 			);
 			path = "Photo Export";
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */,
+				D8B327C925C9A98E00E01BA0 /* Manager.swift in Sources */,
 				D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
