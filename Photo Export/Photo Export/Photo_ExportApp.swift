@@ -5,6 +5,7 @@
 //  Created by Jason Barrie Morley on 30/01/2021.
 //
 
+import Combine
 import SwiftUI
 import Photos
 
@@ -12,6 +13,7 @@ import Photos
 class Photo: Identifiable {
 
     let manager: Manager
+    var cancellable: Cancellable?
 
     var id: String {
         asset.localIdentifier
@@ -28,42 +30,30 @@ class Photo: Identifiable {
         self.asset = asset
     }
 
-    func export(to url: URL, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func export(to url: URL, completion: @escaping (Result<Bool, Error>) -> Void) -> Cancellable {
 
-        let completion: (Result<Bool, Error>) -> Void = { result in
-            DispatchQueue.global(qos: .background).async {
-                completion(result)
+        // TODO: This is a hack.
+        let cancellable = manager.image(for: self)
+            .receive(on: DispatchQueue.global(qos: .background))
+            .tryMap { data -> Data in
+                let metadata = try self.manager.metadata(for: self.databaseUUID) // TODO: This shouldn't return nil if it fails.
+                return data.set(title: metadata.title)!
             }
-        }
-
-        var metadata: PhotoMetadata?
-        do {
-            metadata = try manager.metadata(for: databaseUUID)  // TODO: This can almost certainly error too!
-        } catch {
-            completion(.failure(error))
-            return
-        }
-        let safeMetadata = metadata!
-
-        let options = PHImageRequestOptions()
-        options.version = .current
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = .exact
-
-        manager.image(for: asset) { result in
-            switch result {
-            case .success(let data):
-                guard let image = data.set(title: safeMetadata.title) else {
-                    print("failed to set title")
-                    // TODO: Completion with error.
-                    return
+            .tryMap { data in
+                try data.write(to: url)
+            }
+            .sink(receiveCompletion: { result in
+                switch result {
+                case .finished:
+                    completion(.success(true))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-                try! image.write(to: url)
-                completion(.success(true))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+            }, receiveValue: { _ in })
+
+        self.cancellable = cancellable
+        
+        return cancellable
     }
 
 }

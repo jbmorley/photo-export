@@ -134,7 +134,7 @@ struct ContentView: View {
                                     Button {
                                         let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
                                         let pictureUrl = picturesUrl.appendingPathComponent("example.jpeg")
-                                        photo.export(to: pictureUrl) { result in
+                                        _ = photo.export(to: pictureUrl) { result in
                                             switch result {
                                             case .success:
                                                 print("successfully wrote file to \(pictureUrl)")

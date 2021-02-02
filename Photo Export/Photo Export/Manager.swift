@@ -5,6 +5,7 @@
 //  Created by Jason Barrie Morley on 02/02/2021.
 //
 
+import Combine
 import Photos
 import SwiftUI
 import SQLite3
@@ -22,6 +23,7 @@ let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 enum PhotoLibraryError: Error {
     case notFound
+    case sqlError(message: String)
 }
 
 class PhotoLibrary {
@@ -32,7 +34,7 @@ class PhotoLibrary {
         self.url = url
     }
 
-    func metadata(for id: String) throws -> PhotoMetadata? {
+    func metadata(for id: String) throws -> PhotoMetadata {
 
         guard FileManager.default.fileExists(atPath: self.url.path) else {
             throw PhotoLibraryError.notFound
@@ -41,9 +43,10 @@ class PhotoLibrary {
         var db: OpaquePointer?
         guard sqlite3_open(url.path, &db) == SQLITE_OK else {
             print("error opening database")
+            let errorMessage = String(cString: sqlite3_errmsg(db)!)
             sqlite3_close(db)
             db = nil
-            return nil
+            throw PhotoLibraryError.sqlError(message: errorMessage)
         }
 
         defer {
@@ -56,13 +59,13 @@ class PhotoLibrary {
 
         var statement: OpaquePointer?
         if sqlite3_prepare_v2(db, "SELECT ZADDITIONALASSETATTRIBUTES.ZTITLE FROM ZASSET JOIN ZADDITIONALASSETATTRIBUTES ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK where ZUUID = ?", -1, &statement, nil) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("error preparing select: \(errmsg)")
+            let errorMessage = String(cString: sqlite3_errmsg(db)!)
+            throw PhotoLibraryError.sqlError(message: errorMessage)
         }
 
         if sqlite3_bind_text(statement, 1, id, -1, SQLITE_TRANSIENT) != SQLITE_OK {
-            let errmsg = String(cString: sqlite3_errmsg(db)!)
-            print("failure binding foo: \(errmsg)")
+            let errorMessage = String(cString: sqlite3_errmsg(db)!)
+            throw PhotoLibraryError.sqlError(message: errorMessage)
         }
 
         var name: String?
@@ -76,6 +79,7 @@ class PhotoLibrary {
             statement = nil
         }
 
+        // TODO: This expects just one row, so we should be able to guard this better
         while sqlite3_step(statement) == SQLITE_ROW {
             if let cString = sqlite3_column_text(statement, 0) {
                 name = String(cString: cString)
@@ -85,11 +89,7 @@ class PhotoLibrary {
             }
         }
 
-        guard let safeName = name else {
-            return nil
-        }
-
-        return PhotoMetadata(title: safeName, caption: safeName)
+        return PhotoMetadata(title: name!, caption: name!)
     }
 
 }
@@ -153,7 +153,7 @@ class Manager: NSObject, ObservableObject {
         }
     }
 
-    func metadata(for id: String) throws -> PhotoMetadata? {
+    func metadata(for id: String) throws -> PhotoMetadata {
         // TODO: Consider making this a Promise.
         let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
         let library = PhotoLibrary(url: libraryUrl)
@@ -181,6 +181,25 @@ class Manager: NSObject, ObservableObject {
             completion(.success(data))
         }
 
+    }
+
+    func image(for photo: Photo) -> Future<Data, Error> {
+        return Future<Data, Error> { promise in
+            DispatchQueue.global(qos: .background).async {
+                let options = PHImageRequestOptions()
+                options.version = .current
+                options.isNetworkAccessAllowed = true
+                options.resizeMode = .exact
+                self.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) { data, filename, orientation, unknown in
+                    guard let data = data else {
+                        promise(.failure(ManagerError.unknown))
+                        return
+                    }
+                    promise(.success(data))
+                }
+
+            }
+        }
     }
 
 }
