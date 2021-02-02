@@ -15,7 +15,7 @@ struct Thumbnail: View {
     @State var image: NSImage? = nil
 
     var heart: String {
-        photo.asset.isFavorite ? "❤️" : ""
+        photo.asset.isFavorite ? "❤️" : "..."
     }
 
     var body: some View {
