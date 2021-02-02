@@ -11,8 +11,8 @@ import SQLite3
 
 struct PhotoMetadata {
 
-    let title: String
-    let caption: String
+    let title: String?
+    let caption: String?
 
 }
 
@@ -87,7 +87,7 @@ class PhotoLibrary {
             }
         }
 
-        return PhotoMetadata(title: name ?? "", caption: name ?? "")
+        return PhotoMetadata(title: name, caption: name)
     }
 
 }

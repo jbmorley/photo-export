@@ -37,7 +37,10 @@ class Photo: Identifiable {
             .receive(on: DispatchQueue.global(qos: .background))
             .tryMap { data -> Data in
                 let metadata = try self.manager.metadata(for: self.databaseUUID) // TODO: This shouldn't return nil if it fails.
-                return data.set(title: metadata.title)!
+                guard let title = metadata.title else {
+                    return data
+                }
+                return data.set(title: title)!
             }
             .tryMap { data in
                 try data.write(to: url)
