@@ -61,17 +61,6 @@ class Photo: Identifiable {
 
 }
 
-struct ManagerKey: EnvironmentKey {
-    static var defaultValue: Manager = Manager()
-}
-
-extension EnvironmentValues {
-    var manager: Manager {
-        get { self[ManagerKey.self] }
-        set { self[ManagerKey.self] = newValue }
-    }
-}
-
 @main
 struct Photo_ExportApp: App {
 

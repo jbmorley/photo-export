@@ -9,10 +9,19 @@ import Combine
 import Photos
 import SwiftUI
 
+struct ManagerKey: EnvironmentKey {
+    static var defaultValue: Manager = Manager()
+}
+
+extension EnvironmentValues {
+    var manager: Manager {
+        get { self[ManagerKey.self] }
+        set { self[ManagerKey.self] = newValue }
+    }
+}
+
 enum ManagerError: Error {
-
     case unknown
-
 }
 
 class Manager: NSObject, ObservableObject {
