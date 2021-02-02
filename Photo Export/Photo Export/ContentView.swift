@@ -171,39 +171,6 @@ extension Data {
         return data as Data
     }
 
-
-//        CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)imagedata, NULL);
-//        CGImageMetadataRef imageMetadataRef = CGImageSourceCopyMetadataAtIndex(source, 0, NULL);
-//        NSArray *metadata = CFBridgingRelease(CGImageMetadataCopyTags(imageMetadataRef));
-//        NSLog(@"metadata = %@", metadata);
-//
-//        for (id aRef in metadata)
-//        {
-//            CGImageMetadataTagRef currentRef = (__bridge CGImageMetadataTagRef)(aRef);
-//            NSLog(@"Ref: %@", currentRef);
-//            CGImageMetadataType type = CGImageMetadataTagGetType(currentRef);
-//            NSLog(@"Type: %d", type);
-//            CFStringRef nameSpace = CGImageMetadataTagCopyNamespace(currentRef);
-//            NSLog(@"NameSpace: %@", nameSpace);
-//            CFStringRef prefix = CGImageMetadataTagCopyPrefix(currentRef);
-//            NSLog(@"prefix: %@", prefix);
-//            CFStringRef name = CGImageMetadataTagCopyName(currentRef);
-//            NSLog(@"name: %@", name);
-//            CFTypeRef value = CGImageMetadataTagCopyValue(currentRef);
-//            NSLog(@"Value: %@", value);
-//
-//            CFStringRef valueTypeStr =  CFCopyTypeIDDescription(CFGetTypeID(value));
-//            NSLog(@"valueTypeStr: %@", valueTypeStr);
-//
-//            //Test related to question
-//            if ([@"GPano" isEqualToString:(__bridge NSString *)prefix] && [@"PoseHeadingDegrees" isEqualToString:(__bridge NSString *)name])
-//            {
-//                NSString *str = (__bridge NSString *)value;
-//                NSLog(@"Str: %@", str);
-//                NSLog(@"Int: %d", [str intValue]);
-//            }
-//        }
-
 }
 
 struct ContentView: View {
