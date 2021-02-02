@@ -24,11 +24,41 @@ enum ManagerError: Error {
     case unknown
 }
 
+class Collection: ObservableObject, Identifiable {
+
+    var id: String { collection.id }
+
+    @Published var photos: [Photo] = []
+
+    // TODO: This should probably be weak??
+    var manager: Manager
+    var collection: PHAssetCollection
+
+    var localizedTitle: String {
+        collection.localizedTitle ?? "Untitled"
+    }
+
+    init(manager: Manager, collection: PHAssetCollection) {
+        self.manager = manager
+        self.collection = collection
+
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+        let result = PHAsset.fetchAssets(in: collection, options: options)
+        result.enumerateObjects { asset, index, stop in
+            dispatchPrecondition(condition: .onQueue(.main))
+            self.photos.append(Photo(manager: manager, asset: asset))
+        }
+    }
+
+}
+
 class Manager: NSObject, ObservableObject {
 
     @Published var requiresAuthorization = true
     @Published var photos: [Photo] = []
-    @Published var collections: [PHCollection] = []
+    @Published var collections: [Collection] = []
 
     let imageManager = PHCachingImageManager()
 
@@ -48,18 +78,20 @@ class Manager: NSObject, ObservableObject {
         PHPhotoLibrary.shared().register(self as PHPhotoLibraryChangeObserver)
         PHPhotoLibrary.shared().register(self as PHPhotoLibraryAvailabilityObserver)
 
-        let allPhotosOptions = PHFetchOptions()
-        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
-
         // Get all the collections.
         let collectionResult = PHAssetCollection.fetchTopLevelUserCollections(with: nil)
         collectionResult.enumerateObjects { collection, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
-            self.collections.append(collection)
+            guard let assetCollection = collection as? PHAssetCollection else {
+                return
+            }
+            self.collections.append(Collection(manager: self, collection: assetCollection))
         }
 
         // TODO: Consider doing this on a different thread.
+        let allPhotosOptions = PHFetchOptions()
+        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
         var photos: [Photo] = []
         allPhotos.enumerateObjects { asset, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
