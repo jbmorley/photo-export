@@ -73,29 +73,6 @@ class Manager: NSObject, ObservableObject {
         return try library.metadata(for: id)
     }
 
-    func image(for asset: PHAsset, completion: @escaping (Result<Data, Error>) -> Void) {
-
-        let completion: (Result<Data, Error>) -> Void = { result in
-            DispatchQueue.global(qos: .background).async {
-                completion(result)
-            }
-        }
-
-        let options = PHImageRequestOptions()
-        options.version = .current
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = .exact
-
-        imageManager.requestImageDataAndOrientation(for: asset, options: options) { data, filename, orientation, unknown in
-            guard let data = data else {
-                completion(.failure(ManagerError.unknown))
-                return
-            }
-            completion(.success(data))
-        }
-
-    }
-
     func image(for photo: Photo) -> Future<Data, Error> {
         return Future<Data, Error> { promise in
             DispatchQueue.global(qos: .background).async {
