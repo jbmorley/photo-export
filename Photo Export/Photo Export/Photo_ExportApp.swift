@@ -36,7 +36,7 @@ class Photo: Identifiable {
         let cancellable = manager.image(for: self)
             .receive(on: DispatchQueue.global(qos: .background))
             .tryMap { data -> Data in
-                let metadata = try self.manager.metadata(for: self.databaseUUID) // TODO: This shouldn't return nil if it fails.
+                let metadata = try self.manager.metadata(for: self.databaseUUID)
                 guard let title = metadata.title else {
                     return data
                 }
