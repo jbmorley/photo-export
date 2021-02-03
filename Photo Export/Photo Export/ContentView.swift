@@ -32,8 +32,7 @@ struct CollectionView: View {
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
                                 let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
-                                let pictureUrl = picturesUrl.appendingPathComponent("example.jpeg")
-                                let export = ExportTask(photo: photo, url: pictureUrl)
+                                let export = ExportTask(photo: photo, url: picturesUrl)  // TODO: Document as URL
                                 manager.taskManager.add(task: export)
                             } label: {
                                 Text("Export...")

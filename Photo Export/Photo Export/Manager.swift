@@ -113,6 +113,12 @@ class TaskManager: ObservableObject {
 
 }
 
+struct AssetDetails {
+    let data: Data
+    let filename: String
+    let orientation: CGImagePropertyOrientation
+}
+
 class Manager: NSObject, ObservableObject {
 
     @Published var requiresAuthorization = true
@@ -182,19 +188,20 @@ class Manager: NSObject, ObservableObject {
         return try library.metadata(for: id)
     }
 
-    func image(for photo: Photo) -> Future<Data, Error> {
-        return Future<Data, Error> { promise in
+    func image(for photo: Photo) -> Future<AssetDetails, Error> {
+        return Future<AssetDetails, Error> { promise in
             DispatchQueue.global(qos: .background).async {
                 let options = PHImageRequestOptions()
                 options.version = .current
                 options.isNetworkAccessAllowed = true
                 options.resizeMode = .exact
                 self.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) { data, filename, orientation, unknown in
-                    guard let data = data else {
+                    guard let data = data,
+                          let filename = filename else {
                         promise(.failure(ManagerError.unknown))
                         return
                     }
-                    promise(.success(data))
+                    promise(.success(AssetDetails(data: data, filename: filename, orientation: orientation)))
                 }
 
             }
