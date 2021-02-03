@@ -33,14 +33,8 @@ struct CollectionView: View {
                             Button {
                                 let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
                                 let pictureUrl = picturesUrl.appendingPathComponent("example.jpeg")
-                                _ = photo.export(to: pictureUrl) { result in
-                                    switch result {
-                                    case .success:
-                                        print("successfully wrote file to \(pictureUrl)")
-                                    case .failure(let error):
-                                        print("failed to safe photo with error \(error)")
-                                    }
-                                }
+                                let export = ExportTask(photo: photo, url: pictureUrl)
+                                manager.taskManager.add(task: export)
                             } label: {
                                 Text("Export...")
                             }

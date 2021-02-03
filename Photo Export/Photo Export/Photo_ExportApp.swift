@@ -13,7 +13,6 @@ import Photos
 class Photo: Identifiable {
 
     let manager: Manager
-    var cancellable: Cancellable?
 
     var id: String {
         asset.localIdentifier
@@ -31,9 +30,7 @@ class Photo: Identifiable {
     }
 
     func export(to url: URL, completion: @escaping (Result<Bool, Error>) -> Void) -> Cancellable {
-
-        // TODO: This is a hack.
-        let cancellable = manager.image(for: self)
+        return manager.image(for: self)
             .receive(on: DispatchQueue.global(qos: .background))
             .tryMap { data -> Data in
                 let metadata = try self.manager.metadata(for: self.databaseUUID)
@@ -53,10 +50,6 @@ class Photo: Identifiable {
                     completion(.failure(error))
                 }
             }, receiveValue: { _ in })
-
-        self.cancellable = cancellable
-        
-        return cancellable
     }
 
 }

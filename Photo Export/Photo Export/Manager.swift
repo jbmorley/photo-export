@@ -43,13 +43,72 @@ class Collection: ObservableObject, Identifiable {
         self.collection = collection
 
         let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 
         let result = PHAsset.fetchAssets(in: collection, options: options)
         result.enumerateObjects { asset, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
             self.photos.append(Photo(manager: manager, asset: asset))
         }
+    }
+
+}
+
+class ExportTask: Operation {
+
+    override var isAsynchronous: Bool { false }
+    override var isExecuting: Bool { running }
+    override var isFinished: Bool { complete }
+
+    let photo: Photo
+    let url: URL
+    var cancelleable: Cancellable?
+    var running = false
+    var complete = false
+
+    init(photo: Photo, url: URL) {
+        self.photo = photo
+        self.url = url
+    }
+
+    override func start() {
+        running = true
+        print("starting export")
+        let sem = DispatchSemaphore(value: 0)
+        cancelleable = photo.export(to: url) { result in
+            switch result {
+            case .success:
+                print("successfully wrote file to \(self.url)")
+            case .failure(let error):
+                print("failed to safe photo with error \(error)")
+            }
+            // TODO: How do I know which thread to dispatch this to?
+
+            sem.signal()
+        }
+        print("waiting for export to finish")
+        sem.wait()
+        print("finishing export")
+        complete = true
+        running = false
+    }
+
+    override func cancel() {
+        cancelleable?.cancel()
+    }
+
+}
+
+class TaskManager: ObservableObject {
+
+    let queue = OperationQueue()
+
+    init() {
+        queue.maxConcurrentOperationCount = 1
+    }
+
+    func add(task: ExportTask) {
+        queue.addOperation(task)
     }
 
 }
@@ -61,6 +120,7 @@ class Manager: NSObject, ObservableObject {
     @Published var collections: [Collection] = []
 
     let imageManager = PHCachingImageManager()
+    let taskManager = TaskManager()
 
     override init() {
         super.init()
@@ -90,7 +150,7 @@ class Manager: NSObject, ObservableObject {
 
         // TODO: Consider doing this on a different thread.
         let allPhotosOptions = PHFetchOptions()
-        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
         var photos: [Photo] = []
         allPhotos.enumerateObjects { asset, index, stop in
