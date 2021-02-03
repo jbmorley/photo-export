@@ -46,6 +46,10 @@ struct CollectionView: View {
             ToolbarItem {
                 Button {
 
+                    let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
+                    let tasks = photos.map { ExportTask(photo: $0, url: picturesUrl) }
+                    manager.taskManager.run(tasks)
+
                 } label: {
                     Image(systemName: "square.and.arrow.down")
                         .foregroundColor(.primary)

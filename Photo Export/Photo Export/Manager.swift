@@ -111,6 +111,10 @@ class TaskManager: ObservableObject {
         queue.addOperation(task)
     }
 
+    func run(_ tasks: [ExportTask]) {
+        queue.addOperations(tasks, waitUntilFinished: false)
+    }
+
 }
 
 struct AssetDetails {
