@@ -107,7 +107,7 @@ class TaskManager: ObservableObject {
         queue.maxConcurrentOperationCount = 1
     }
 
-    func add(task: ExportTask) {
+    func run(_ task: ExportTask) {
         queue.addOperation(task)
     }
 

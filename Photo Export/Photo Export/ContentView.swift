@@ -33,7 +33,7 @@ struct CollectionView: View {
                             Button {
                                 let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
                                 let export = ExportTask(photo: photo, url: picturesUrl)  // TODO: Document as URL
-                                manager.taskManager.add(task: export)
+                                manager.taskManager.run(export)
                             } label: {
                                 Text("Export...")
                             }
