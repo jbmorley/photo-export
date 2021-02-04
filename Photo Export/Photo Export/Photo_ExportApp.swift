@@ -49,9 +49,9 @@ class Photo: Identifiable {
 
                 let resources = PHAssetResource.assetResources(for: self.asset)
                 let originalFilename = resources[0].originalFilename
-                let basename = (originalFilename as NSString).deletingPathExtension  // TODO: Add convenience
-                let pathExtension = (details.filename as NSString).pathExtension  // TODO: Add convenience
-                let destinationUrl = url.appendingPathComponent(basename).appendingPathExtension(pathExtension)
+                let destinationUrl = url
+                    .appendingPathComponent(originalFilename.deletingPathExtension)
+                    .appendingPathExtension(details.filename.pathExtension)
                 try details.data.write(to: destinationUrl)
 
             }
