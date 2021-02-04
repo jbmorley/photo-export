@@ -124,6 +124,7 @@ class Manager: NSObject, ObservableObject {
             requiresAuthorization = true
         }
 
+        // TODO: Do something with these.
         PHPhotoLibrary.shared().register(self as PHPhotoLibraryChangeObserver)
         PHPhotoLibrary.shared().register(self as PHPhotoLibraryAvailabilityObserver)
 
