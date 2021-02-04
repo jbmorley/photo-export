@@ -19,6 +19,7 @@
 		D8B327C925C9A98E00E01BA0 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B327C825C9A98E00E01BA0 /* Manager.swift */; };
 		D8C8898025CC815A009E54C0 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C8897F25CC815A009E54C0 /* String.swift */; };
 		D8C8898525CC825A009E54C0 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C8898425CC825A009E54C0 /* Collection.swift */; };
+		D8C8898A25CC86F8009E54C0 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C8898925CC86F8009E54C0 /* CollectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		D8B327C825C9A98E00E01BA0 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		D8C8897F25CC815A009E54C0 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D8C8898425CC825A009E54C0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		D8C8898925CC86F8009E54C0 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				D8080F6525CA06A600E2511D /* Thumbnail.swift */,
 				D8080F6D25CA09A500E2511D /* PhotoLibrary.swift */,
 				D8C8898425CC825A009E54C0 /* Collection.swift */,
+				D8C8898925CC86F8009E54C0 /* CollectionView.swift */,
 			);
 			path = "Photo Export";
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8C8898A25CC86F8009E54C0 /* CollectionView.swift in Sources */,
 				D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */,
 				D8B327C925C9A98E00E01BA0 /* Manager.swift in Sources */,
 				D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */,

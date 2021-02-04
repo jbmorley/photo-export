@@ -67,12 +67,21 @@ class ExportTask: Operation {
 
 }
 
-class TaskManager: ObservableObject {
+class TaskManager: NSObject, ObservableObject {
 
-    let queue = OperationQueue()
+    @objc let queue = OperationQueue()
 
-    init() {
-        queue.maxConcurrentOperationCount = 1
+    var observation: NSKeyValueObservation?
+
+    override init() {
+        queue.maxConcurrentOperationCount = 3
+        super.init()
+        dispatchPrecondition(condition: .onQueue(.main))
+        observation = observe(\.queue.operationCount, options: [.new]) { object, change in
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
     }
 
     func run(_ task: ExportTask) {
@@ -99,6 +108,8 @@ class Manager: NSObject, ObservableObject {
 
     let imageManager = PHCachingImageManager()
     let taskManager = TaskManager()
+
+    var cancellable: Cancellable?
 
     override init() {
         super.init()
@@ -136,6 +147,10 @@ class Manager: NSObject, ObservableObject {
             photos.append(Photo(manager: self, asset: asset))
         }
         self.photos = photos
+
+        cancellable = taskManager.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
 
         // TODO: Do we need to do this, see https://developer.apple.com/documentation/photokit/browsing_and_modifying_photo_albums.
 //        imageManager.startCachingImages(for: addedAssets,
