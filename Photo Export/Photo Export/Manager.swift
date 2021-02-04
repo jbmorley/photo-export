@@ -52,7 +52,6 @@ class ExportTask: Operation {
             case .failure(let error):
                 print("failed to safe photo with error \(error)")
             }
-
             sem.signal()
         }
         print("waiting for export to finish")
