@@ -52,7 +52,6 @@ class ExportTask: Operation {
             case .failure(let error):
                 print("failed to safe photo with error \(error)")
             }
-            // TODO: How do I know which thread to dispatch this to?
 
             sem.signal()
         }
