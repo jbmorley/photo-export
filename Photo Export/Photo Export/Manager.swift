@@ -24,6 +24,7 @@ enum ManagerError: Error {
     case unknown
 }
 
+// TODO: Move this out.
 class ExportTask: Operation {
 
     override var isAsynchronous: Bool { false }
@@ -67,6 +68,7 @@ class ExportTask: Operation {
 
 }
 
+// TODO: Move this out.
 class TaskManager: NSObject, ObservableObject {
 
     @objc let queue = OperationQueue()
@@ -101,6 +103,8 @@ struct AssetDetails {
 }
 
 class Manager: NSObject, ObservableObject {
+
+    // TODO: Support setting the photo library.
 
     @Published var requiresAuthorization = true
     @Published var photos: [Photo] = []
@@ -163,7 +167,6 @@ class Manager: NSObject, ObservableObject {
 
     func authorize() {
         print("Request authorization")
-
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
             print(status)
         }
@@ -194,6 +197,19 @@ class Manager: NSObject, ObservableObject {
 
             }
         }
+    }
+
+    func export(_ photos: [Photo]) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseFiles = false
+        openPanel.canChooseDirectories = true
+        guard openPanel.runModal() == NSApplication.ModalResponse.OK,
+              let url = openPanel.url else {
+            print("export cancelled")
+            return
+        }
+        let tasks = photos.map { ExportTask(photo: $0, url: url) }
+        taskManager.run(tasks)
     }
 
 }

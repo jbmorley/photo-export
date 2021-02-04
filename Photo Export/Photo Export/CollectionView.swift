@@ -25,16 +25,7 @@ struct CollectionView: View {
                     Thumbnail(manager: manager, photo: photo)
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
-                                let openPanel = NSOpenPanel()
-                                openPanel.canChooseFiles = false
-                                openPanel.canChooseDirectories = true
-                                guard openPanel.runModal() == NSApplication.ModalResponse.OK,
-                                      let url = openPanel.url else {
-                                    print("export cancelled")
-                                    return
-                                }
-                                let export = ExportTask(photo: photo, url: url)
-                                manager.taskManager.run(export)
+                                manager.export([photo])
                             } label: {
                                 Text("Export...")
                             }
@@ -46,11 +37,7 @@ struct CollectionView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-
-                    let picturesUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures")
-                    let tasks = photos.map { ExportTask(photo: $0, url: picturesUrl) }
-                    manager.taskManager.run(tasks)
-
+                    manager.export(photos)
                 } label: {
                     Image(systemName: "square.and.arrow.down")
                         .foregroundColor(.primary)
