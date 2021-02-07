@@ -24,6 +24,8 @@
 		D8C8899F25CCA4EB009E54C0 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C8899E25CCA4EB009E54C0 /* Photo.swift */; };
 		D8C889A425CCAC59009E54C0 /* PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C889A325CCAC59009E54C0 /* PHAsset.swift */; };
 		D8CF3C1025D06E5D00F41DD4 /* PHImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C0F25D06E5D00F41DD4 /* PHImageManager.swift */; };
+		D8CF3C1525D0932900F41DD4 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1425D0932900F41DD4 /* TaskManager.swift */; };
+		D8CF3C1A25D0934900F41DD4 /* AVAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1925D0934900F41DD4 /* AVAsset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,8 @@
 		D8C8899E25CCA4EB009E54C0 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		D8C889A325CCAC59009E54C0 /* PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAsset.swift; sourceTree = "<group>"; };
 		D8CF3C0F25D06E5D00F41DD4 /* PHImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHImageManager.swift; sourceTree = "<group>"; };
+		D8CF3C1425D0932900F41DD4 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		D8CF3C1925D0934900F41DD4 /* AVAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAsset.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +106,7 @@
 				D8C8897F25CC815A009E54C0 /* String.swift */,
 				D8C889A325CCAC59009E54C0 /* PHAsset.swift */,
 				D8CF3C0F25D06E5D00F41DD4 /* PHImageManager.swift */,
+				D8CF3C1925D0934900F41DD4 /* AVAsset.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 				D8C8898925CC86F8009E54C0 /* CollectionView.swift */,
 				D8C8899925CCA369009E54C0 /* AssetDetails.swift */,
 				D8C8899E25CCA4EB009E54C0 /* Photo.swift */,
+				D8CF3C1425D0932900F41DD4 /* TaskManager.swift */,
 			);
 			path = "Photo Export";
 			sourceTree = "<group>";
@@ -306,6 +312,7 @@
 				D8C8898A25CC86F8009E54C0 /* CollectionView.swift in Sources */,
 				D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */,
 				D8B327C925C9A98E00E01BA0 /* Manager.swift in Sources */,
+				D8CF3C1A25D0934900F41DD4 /* AVAsset.swift in Sources */,
 				D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */,
 				D8080F6625CA06A600E2511D /* Thumbnail.swift in Sources */,
 				D8C8898025CC815A009E54C0 /* String.swift in Sources */,
@@ -314,6 +321,7 @@
 				D8080F6125CA066E00E2511D /* Data.swift in Sources */,
 				D8C8898525CC825A009E54C0 /* Collection.swift in Sources */,
 				D8CF3C1025D06E5D00F41DD4 /* PHImageManager.swift in Sources */,
+				D8CF3C1525D0932900F41DD4 /* TaskManager.swift in Sources */,
 				D8C8899A25CCA369009E54C0 /* AssetDetails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

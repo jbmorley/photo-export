@@ -65,40 +65,6 @@ class FutureOperation: Operation {
 
 }
 
-
-// TODO: Move this out.
-class TaskManager: NSObject, ObservableObject {
-
-    @objc let queue = OperationQueue()
-
-    var observation: NSKeyValueObservation?
-
-    override init() {
-        queue.maxConcurrentOperationCount = 3
-        super.init()
-        dispatchPrecondition(condition: .onQueue(.main))
-        observation = observe(\.queue.operationCount, options: [.new]) { object, change in
-            DispatchQueue.main.async {
-                self.objectWillChange.send()
-            }
-        }
-    }
-
-    func run(_ task: Operation) {
-        queue.addOperation(task)
-    }
-
-    func run(_ tasks: [Operation]) {
-        queue.addOperations(tasks, waitUntilFinished: false)
-    }
-
-}
-
-extension AVFileType {
-    var utType: UTType { UTType(rawValue)! }
-    var pathExtension: String { utType.preferredFilenameExtension! }  // TODO: This should be able to fail
-}
-
 class Manager: NSObject, ObservableObject {
 
     // TODO: Support setting the photo library.
@@ -187,7 +153,7 @@ class Manager: NSObject, ObservableObject {
     func image(for asset: PHAsset) -> Future<AssetDetails, Error> {
         return Future<AssetDetails, Error> { promise in
             DispatchQueue.global(qos: .background).async {
-                
+
                 let options = PHImageRequestOptions()
                 options.version = .current
                 options.isNetworkAccessAllowed = true
@@ -267,17 +233,6 @@ class Manager: NSObject, ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    func exportOperation(asset: PHAsset, directoryUrl: URL) throws -> Operation {
-        switch asset.mediaType {
-        case .image:
-            return FutureOperation { self.export(image: asset, directoryUrl: directoryUrl) }
-        case .video:
-            return FutureOperation { self.export(video: asset, directoryUrl: directoryUrl) }
-        default:
-            throw ManagerError.unsupportedMediaType
-        }
-    }
-
     func export(_ photos: [Photo]) throws {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
@@ -287,7 +242,18 @@ class Manager: NSObject, ObservableObject {
             print("export cancelled")
             return
         }
-        let tasks = try photos.map { try self.exportOperation(asset: $0.asset, directoryUrl: url) }
+        let tasks = try photos
+            .map { $0.asset }
+            .map { asset -> FutureOperation in
+            switch asset.mediaType {
+            case .image:
+                return FutureOperation { self.export(image: asset, directoryUrl: url) }
+            case .video:
+                return FutureOperation { self.export(video: asset, directoryUrl: url) }
+            default:
+                throw ManagerError.unsupportedMediaType
+            }
+        }
         taskManager.run(tasks)
     }
 
