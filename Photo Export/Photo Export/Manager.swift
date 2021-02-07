@@ -22,7 +22,10 @@ extension EnvironmentValues {
 
 enum ManagerError: Error {
     case unknown
+    case unsupportedMediaType
 }
+
+
 
 // TODO: Move this out.
 class ExportTask: Operation {
@@ -68,6 +71,48 @@ class ExportTask: Operation {
 
 }
 
+
+class FutureOperation: Operation {
+
+    override var isAsynchronous: Bool { false }
+    override var isExecuting: Bool { running }
+    override var isFinished: Bool { complete }
+
+    var block: () -> AnyPublisher<Bool, Error>
+    var cancellable: Cancellable?
+    var running = false
+    var complete = false
+
+    init(block: @escaping () -> AnyPublisher<Bool, Error>) {
+        self.block = block
+    }
+
+    override func start() {
+        running = true
+        print("starting export")
+        let sem = DispatchSemaphore(value: 0)
+        cancellable = block().sink(receiveCompletion: { result in
+            switch result {
+            case .finished:
+                print("future operation success")
+            case .failure(let error):
+                print("future operation failure with error \(error)")
+            }
+            sem.signal()
+        }, receiveValue: { _ in })
+
+        sem.wait()
+        complete = true
+        running = false
+    }
+
+    override func cancel() {
+        cancellable?.cancel()
+    }
+
+}
+
+
 // TODO: Move this out.
 class TaskManager: NSObject, ObservableObject {
 
@@ -86,11 +131,11 @@ class TaskManager: NSObject, ObservableObject {
         }
     }
 
-    func run(_ task: ExportTask) {
+    func run(_ task: Operation) {
         queue.addOperation(task)
     }
 
-    func run(_ tasks: [ExportTask]) {
+    func run(_ tasks: [Operation]) {
         queue.addOperations(tasks, waitUntilFinished: false)
     }
 
@@ -212,57 +257,56 @@ class Manager: NSObject, ObservableObject {
         return item.copy() as! AVMetadataItem
     }
 
-//
     // TODO: Perhaps this could be moved to the image manager?
-    func exportVideo(_ photo: Photo) {
+    // TODO: Rename this.
+    func exportVideo(asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
 
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseFiles = false
-        openPanel.canChooseDirectories = true
-        guard openPanel.runModal() == NSApplication.ModalResponse.OK,
-              let url = openPanel.url else {
-            print("export cancelled")
-            return
-        }
-
-        let options = PHVideoRequestOptions()
-
-        // Get the presets.
         let availablePresets = AVAssetExportSession.allExportPresets()
         print(availablePresets)
 
-        self.imageManager.requestExportSession(forVideo: photo.asset,
-                                               options: options,
-                                               exportPreset: availablePresets[0]) { session, info in
-            print("Doing some export??")
-            guard let session = session,
-                  let info = info else {
-                print("unable to get export session")
-                return
+        let options = PHVideoRequestOptions()
+        return self.imageManager.requestExportSession(video: asset,
+                                                      options: options,
+                                                      exportPreset: availablePresets[0])
+            .map { $0.session }
+            .flatMap { session -> Future<Bool, Error> in
+
+                print("\(session)")
+                print("\(asset.originalFilename)")
+                print("\(session.supportedFileTypes)")
+                print(session.metadata ?? "nil")
+
+                let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: "My Movie Title")
+                let descItem = self.makeMetadataItem(.commonIdentifierDescription, value: "My Movie Description")
+                session.metadata = [titleItem, descItem]
+
+                let outputFileType = session.supportedFileTypes[0]
+                let outputPathExtension = outputFileType.pathExtension
+
+                session.outputFileType = outputFileType
+                session.outputURL = directoryUrl
+                    .appendingPathComponent(asset.originalFilename.deletingPathExtension)
+                    .appendingPathExtension(outputPathExtension)
+
+                return session.export()
             }
-            print("\(session)")
-            print("\(info)")
-            print("\(photo.asset.originalFilename)")
-            print("\(session.supportedFileTypes)")
-            print(session.metadata)
+            .eraseToAnyPublisher()
 
-            let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: "My Movie Title")
-            let descItem = self.makeMetadataItem(.commonIdentifierDescription, value: "My Movie Description")
-            session.metadata = [titleItem, descItem]
+    }
 
-
-            let outputFileType = session.supportedFileTypes[0]
-            let outputPathExtension = outputFileType.pathExtension
-
-            session.outputFileType = outputFileType
-            session.outputURL = url.appendingPathComponent(photo.asset.originalFilename.deletingPathExtension).appendingPathExtension(outputPathExtension)
-            session.exportAsynchronously {
-                print("done!")
-            }
+    // TODO: Switch this to assets.
+    func exportOperation(photo: Photo, directoryUrl: URL) throws -> Operation {
+        switch photo.asset.mediaType {
+        case .image:
+            return ExportTask(photo: photo, url: directoryUrl)
+        case .video:
+            return FutureOperation { self.exportVideo(asset: photo.asset, directoryUrl: directoryUrl) }
+        default:
+            throw ManagerError.unsupportedMediaType
         }
     }
 
-    func export(_ photos: [Photo]) {
+    func export(_ photos: [Photo]) throws {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true
@@ -271,12 +315,11 @@ class Manager: NSObject, ObservableObject {
             print("export cancelled")
             return
         }
-        let tasks = photos.map { ExportTask(photo: $0, url: url) }
+        let tasks = try photos.map { try self.exportOperation(photo: $0, directoryUrl: url) }
         taskManager.run(tasks)
     }
 
 }
-
 
 extension Manager: PHPhotoLibraryChangeObserver {
 

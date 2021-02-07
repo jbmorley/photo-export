@@ -25,11 +25,10 @@ struct CollectionView: View {
                     Thumbnail(manager: manager, photo: photo)
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
-                                // TODO: Crash if we get an unsupported media type.
-                                if photo.asset.mediaType == .video {
-                                    manager.exportVideo(photo)
-                                } else {
-                                    manager.export([photo])
+                                do {
+                                    try manager.export([photo])
+                                } catch {
+                                    print("failed to export asset with error \(error)")
                                 }
                             } label: {
                                 Text("Export...")
@@ -42,7 +41,11 @@ struct CollectionView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    manager.export(photos)
+                    do {
+                        try manager.export(photos)
+                    } catch {
+                        print("failed to export assets with error \(error)")
+                    }
                 } label: {
                     Image(systemName: "square.and.arrow.down")
                         .foregroundColor(.primary)
