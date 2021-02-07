@@ -256,12 +256,9 @@ class Manager: NSObject, ObservableObject {
     func export(image asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
         return image(for: asset)
             .receive(on: DispatchQueue.global(qos: .background))
-            .tryMap { details -> AssetDetails in
-                let metadata = try self.metadata(for: asset)
-                guard let title = metadata.title else {
-                    return details
-                }
-                return details.set(data: details.data.set(title: title)!)
+            .zip(asyncMetadata(for: asset))
+            .tryMap { details, metadata -> AssetDetails in
+                return details.set(data: details.data.set(title: metadata.title ?? "")!)
             }
             .tryMap { details in
                 guard let pathExtension = details.fileExtension else {
