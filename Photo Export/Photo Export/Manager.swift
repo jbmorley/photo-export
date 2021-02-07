@@ -25,46 +25,6 @@ enum ManagerError: Error {
     case unsupportedMediaType
 }
 
-class FutureOperation: Operation {
-
-    override var isAsynchronous: Bool { false }
-    override var isExecuting: Bool { running }
-    override var isFinished: Bool { complete }
-
-    var block: () -> AnyPublisher<Bool, Error>
-    var cancellable: Cancellable?
-    var running = false
-    var complete = false
-
-    init(block: @escaping () -> AnyPublisher<Bool, Error>) {
-        self.block = block
-    }
-
-    override func start() {
-        running = true
-        print("starting export")
-        let sem = DispatchSemaphore(value: 0)
-        cancellable = block().sink(receiveCompletion: { result in
-            switch result {
-            case .finished:
-                print("future operation success")
-            case .failure(let error):
-                print("future operation failure with error \(error)")
-            }
-            sem.signal()
-        }, receiveValue: { _ in })
-
-        sem.wait()
-        complete = true
-        running = false
-    }
-
-    override func cancel() {
-        cancellable?.cancel()
-    }
-
-}
-
 class Manager: NSObject, ObservableObject {
 
     // TODO: Support setting the photo library.
