@@ -187,12 +187,11 @@ class Manager: NSObject, ObservableObject {
     func image(for asset: PHAsset) -> Future<AssetDetails, Error> {
         return Future<AssetDetails, Error> { promise in
             DispatchQueue.global(qos: .background).async {
+                
                 let options = PHImageRequestOptions()
                 options.version = .current
                 options.isNetworkAccessAllowed = true
                 options.resizeMode = .exact
-
-                // TODO: Do I need to normalize the crop rect?
                 options.deliveryMode = .highQualityFormat
 
                 // TODO: Consider moving this to PHCachingImageManager?
