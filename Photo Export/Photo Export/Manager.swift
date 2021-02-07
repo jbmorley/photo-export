@@ -31,7 +31,6 @@ class Manager: NSObject, ObservableObject {
     // TODO: Support setting the photo library.
 
     @Published var requiresAuthorization = true
-    @Published var photos: [PHAsset] = []
     @Published var collections: [Collection] = []
 
     let imageManager = PHCachingImageManager()
@@ -65,17 +64,6 @@ class Manager: NSObject, ObservableObject {
             }
             self.collections.append(Collection(manager: self, collection: assetCollection))
         }
-
-        // TODO: Consider doing this on a different thread.
-        let allPhotosOptions = PHFetchOptions()
-        allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
-        var photos: [PHAsset] = []
-        allPhotos.enumerateObjects { asset, index, stop in
-            dispatchPrecondition(condition: .onQueue(.main))
-            photos.append(asset)
-        }
-        self.photos = photos
 
         cancellable = taskManager.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()

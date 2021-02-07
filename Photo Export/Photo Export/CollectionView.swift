@@ -17,7 +17,7 @@ struct CollectionView: View {
     static let spacing: CGFloat = 8
     let columns = [GridItem(.adaptive(minimum: 200, maximum: 200), spacing: spacing)]
 
-    var assets: [PHAsset] { collection.photos.filter { !showOnlyFavorites || $0.isFavorite } }
+    var assets: [PHAsset] { collection.assets.filter { !showOnlyFavorites || $0.isFavorite } }
 
     var body: some View {
         ScrollView {
