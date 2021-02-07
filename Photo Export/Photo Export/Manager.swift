@@ -96,10 +96,9 @@ class TaskManager: NSObject, ObservableObject {
 
 }
 
-struct AssetDetails {
-    let data: Data
-    let filename: String
-    let orientation: CGImagePropertyOrientation
+extension AVFileType {
+    var utType: UTType { UTType(rawValue)! }
+    var pathExtension: String { utType.preferredFilenameExtension! }  // TODO: This should be able to fail
 }
 
 class Manager: NSObject, ObservableObject {
@@ -186,15 +185,79 @@ class Manager: NSObject, ObservableObject {
                 options.version = .current
                 options.isNetworkAccessAllowed = true
                 options.resizeMode = .exact
-                self.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) { data, filename, orientation, unknown in
+
+                // TODO: Do I need to normalize the crop rect?
+                options.deliveryMode = .highQualityFormat
+
+                // TODO: Consider moving this to PHCachingImageManager?
+                self.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) {
+                    data, uti, orientation, unknown in
                     guard let data = data,
-                          let filename = filename else {
+                          let uti = uti else {
                         promise(.failure(ManagerError.unknown))
                         return
                     }
-                    promise(.success(AssetDetails(data: data, filename: filename, orientation: orientation)))
+                    promise(.success(AssetDetails(data: data, uti: uti, orientation: orientation)))
                 }
 
+            }
+        }
+    }
+
+    func makeMetadataItem(_ identifier: AVMetadataIdentifier, value: Any) -> AVMetadataItem {
+        let item = AVMutableMetadataItem()
+        item.identifier = identifier
+        item.value = value as? NSCopying & NSObjectProtocol
+        item.extendedLanguageTag = "und"
+        return item.copy() as! AVMetadataItem
+    }
+
+//
+    // TODO: Perhaps this could be moved to the image manager?
+    func exportVideo(_ photo: Photo) {
+
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseFiles = false
+        openPanel.canChooseDirectories = true
+        guard openPanel.runModal() == NSApplication.ModalResponse.OK,
+              let url = openPanel.url else {
+            print("export cancelled")
+            return
+        }
+
+        let options = PHVideoRequestOptions()
+
+        // Get the presets.
+        let availablePresets = AVAssetExportSession.allExportPresets()
+        print(availablePresets)
+
+        self.imageManager.requestExportSession(forVideo: photo.asset,
+                                               options: options,
+                                               exportPreset: availablePresets[0]) { session, info in
+            print("Doing some export??")
+            guard let session = session,
+                  let info = info else {
+                print("unable to get export session")
+                return
+            }
+            print("\(session)")
+            print("\(info)")
+            print("\(photo.asset.originalFilename)")
+            print("\(session.supportedFileTypes)")
+            print(session.metadata)
+
+            let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: "My Movie Title")
+            let descItem = self.makeMetadataItem(.commonIdentifierDescription, value: "My Movie Description")
+            session.metadata = [titleItem, descItem]
+
+
+            let outputFileType = session.supportedFileTypes[0]
+            let outputPathExtension = outputFileType.pathExtension
+
+            session.outputFileType = outputFileType
+            session.outputURL = url.appendingPathComponent(photo.asset.originalFilename.deletingPathExtension).appendingPathExtension(outputPathExtension)
+            session.exportAsynchronously {
+                print("done!")
             }
         }
     }

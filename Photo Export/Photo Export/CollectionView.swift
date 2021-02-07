@@ -25,7 +25,12 @@ struct CollectionView: View {
                     Thumbnail(manager: manager, photo: photo)
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
-                                manager.export([photo])
+                                // TODO: Crash if we get an unsupported media type.
+                                if photo.asset.mediaType == .video {
+                                    manager.exportVideo(photo)
+                                } else {
+                                    manager.export([photo])
+                                }
                             } label: {
                                 Text("Export...")
                             }
