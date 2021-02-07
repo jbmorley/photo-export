@@ -211,8 +211,7 @@ class Manager: NSObject, ObservableObject {
     }
 
     // TODO: Perhaps this could be moved to the image manager?
-    // TODO: Rename this.
-    func exportVideo(asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
+    func export(video asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
 
         let availablePresets = AVAssetExportSession.allExportPresets()
         print(availablePresets)
@@ -248,7 +247,7 @@ class Manager: NSObject, ObservableObject {
     }
 
     // TODO: Use the parameters for the naming?
-    func exportImage(asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
+    func export(image asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
         return image(for: asset)
             .receive(on: DispatchQueue.global(qos: .background))
             .tryMap { details -> AssetDetails in
@@ -276,13 +275,12 @@ class Manager: NSObject, ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    // TODO: Switch this to assets.
-    func exportOperation(photo: Photo, directoryUrl: URL) throws -> Operation {
-        switch photo.asset.mediaType {
+    func exportOperation(asset: PHAsset, directoryUrl: URL) throws -> Operation {
+        switch asset.mediaType {
         case .image:
-            return FutureOperation { self.exportImage(asset: photo.asset, directoryUrl: directoryUrl) }
+            return FutureOperation { self.export(image: asset, directoryUrl: directoryUrl) }
         case .video:
-            return FutureOperation { self.exportVideo(asset: photo.asset, directoryUrl: directoryUrl) }
+            return FutureOperation { self.export(video: asset, directoryUrl: directoryUrl) }
         default:
             throw ManagerError.unsupportedMediaType
         }
@@ -297,7 +295,7 @@ class Manager: NSObject, ObservableObject {
             print("export cancelled")
             return
         }
-        let tasks = try photos.map { try self.exportOperation(photo: $0, directoryUrl: url) }
+        let tasks = try photos.map { try self.exportOperation(asset: $0.asset, directoryUrl: url) }
         taskManager.run(tasks)
     }
 
