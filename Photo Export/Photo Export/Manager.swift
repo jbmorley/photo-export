@@ -169,11 +169,24 @@ class Manager: NSObject, ObservableObject {
         }
     }
 
-    func metadata(for id: String) throws -> PhotoMetadata {
+    func metadata(for asset: PHAsset) throws -> PhotoMetadata {
         // TODO: Consider making this a Promise.
         let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
         let library = PhotoLibrary(url: libraryUrl)
-        return try library.metadata(for: id)
+        return try library.metadata(for: asset.databaseUUID)
+    }
+
+    func asyncMetadata(for asset: PHAsset) -> Future<PhotoMetadata, Error> {
+        return Future<PhotoMetadata, Error>.init { promise in
+            DispatchQueue.main.async {
+                do {
+                    let metadata = try self.metadata(for: asset)
+                    promise(.success(metadata))
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
     }
 
     func image(for asset: PHAsset) -> Future<AssetDetails, Error> {
@@ -210,26 +223,20 @@ class Manager: NSObject, ObservableObject {
         return item.copy() as! AVMetadataItem
     }
 
-    // TODO: Perhaps this could be moved to the image manager?
     func export(video asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
 
         let availablePresets = AVAssetExportSession.allExportPresets()
-        print(availablePresets)
 
         let options = PHVideoRequestOptions()
         return self.imageManager.requestExportSession(video: asset,
                                                       options: options,
                                                       exportPreset: availablePresets[0])
             .map { $0.session }
-            .flatMap { session -> Future<Bool, Error> in
+            .zip(asyncMetadata(for: asset))
+            .flatMap { session, metadata -> Future<Bool, Error> in
 
-                print("\(session)")
-                print("\(asset.originalFilename)")
-                print("\(session.supportedFileTypes)")
-                print(session.metadata ?? "nil")
-
-                let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: "My Movie Title")
-                let descItem = self.makeMetadataItem(.commonIdentifierDescription, value: "My Movie Description")
+                let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: metadata.title ?? "")
+                let descItem = self.makeMetadataItem(.commonIdentifierDescription, value: metadata.caption ?? "")
                 session.metadata = [titleItem, descItem]
 
                 let outputFileType = session.supportedFileTypes[0]
@@ -246,30 +253,24 @@ class Manager: NSObject, ObservableObject {
 
     }
 
-    // TODO: Use the parameters for the naming?
     func export(image asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
         return image(for: asset)
             .receive(on: DispatchQueue.global(qos: .background))
             .tryMap { details -> AssetDetails in
-
-                let metadata = try self.metadata(for: asset.databaseUUID)
+                let metadata = try self.metadata(for: asset)
                 guard let title = metadata.title else {
                     return details
                 }
-
                 return details.set(data: details.data.set(title: title)!)
             }
             .tryMap { details in
-
                 guard let pathExtension = details.fileExtension else {
                     throw PhotoError.invalidExtension
                 }
-
                 let destinationUrl = directoryUrl
                     .appendingPathComponent(asset.originalFilename.deletingPathExtension)
                     .appendingPathExtension(pathExtension)
                 try details.data.write(to: destinationUrl)
-
                 return true
             }
             .eraseToAnyPublisher()
