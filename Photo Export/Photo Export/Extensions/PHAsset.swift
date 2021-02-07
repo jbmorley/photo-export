@@ -15,4 +15,8 @@ extension PHAsset {
         return resources[0].originalFilename
     }
 
+    var databaseUUID: String {
+        return String(localIdentifier.prefix(36))
+    }
+
 }

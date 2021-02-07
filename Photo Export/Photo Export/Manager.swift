@@ -25,53 +25,6 @@ enum ManagerError: Error {
     case unsupportedMediaType
 }
 
-
-
-// TODO: Move this out.
-class ExportTask: Operation {
-
-    override var isAsynchronous: Bool { false }
-    override var isExecuting: Bool { running }
-    override var isFinished: Bool { complete }
-
-    let photo: Photo
-    let url: URL
-    var cancelleable: Cancellable?
-    var running = false
-    var complete = false
-
-    init(photo: Photo, url: URL) {
-        self.photo = photo
-        self.url = url
-    }
-
-    override func start() {
-        running = true
-        print("starting export")
-        let sem = DispatchSemaphore(value: 0)
-        cancelleable = photo.export(to: url) { result in
-            switch result {
-            case .success:
-                print("successfully wrote file to \(self.url)")
-            case .failure(let error):
-                print("failed to safe photo with error \(error)")
-            }
-            sem.signal()
-        }
-        print("waiting for export to finish")
-        sem.wait()
-        print("finishing export")
-        complete = true
-        running = false
-    }
-
-    override func cancel() {
-        cancelleable?.cancel()
-    }
-
-}
-
-
 class FutureOperation: Operation {
 
     override var isAsynchronous: Bool { false }
@@ -223,7 +176,7 @@ class Manager: NSObject, ObservableObject {
         return try library.metadata(for: id)
     }
 
-    func image(for photo: Photo) -> Future<AssetDetails, Error> {
+    func image(for asset: PHAsset) -> Future<AssetDetails, Error> {
         return Future<AssetDetails, Error> { promise in
             DispatchQueue.global(qos: .background).async {
                 let options = PHImageRequestOptions()
@@ -235,7 +188,7 @@ class Manager: NSObject, ObservableObject {
                 options.deliveryMode = .highQualityFormat
 
                 // TODO: Consider moving this to PHCachingImageManager?
-                self.imageManager.requestImageDataAndOrientation(for: photo.asset, options: options) {
+                self.imageManager.requestImageDataAndOrientation(for: asset, options: options) {
                     data, uti, orientation, unknown in
                     guard let data = data,
                           let uti = uti else {
@@ -294,11 +247,40 @@ class Manager: NSObject, ObservableObject {
 
     }
 
+    // TODO: Use the parameters for the naming?
+    func exportImage(asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
+        return image(for: asset)
+            .receive(on: DispatchQueue.global(qos: .background))
+            .tryMap { details -> AssetDetails in
+
+                let metadata = try self.metadata(for: asset.databaseUUID)
+                guard let title = metadata.title else {
+                    return details
+                }
+
+                return details.set(data: details.data.set(title: title)!)
+            }
+            .tryMap { details in
+
+                guard let pathExtension = details.fileExtension else {
+                    throw PhotoError.invalidExtension
+                }
+
+                let destinationUrl = directoryUrl
+                    .appendingPathComponent(asset.originalFilename.deletingPathExtension)
+                    .appendingPathExtension(pathExtension)
+                try details.data.write(to: destinationUrl)
+
+                return true
+            }
+            .eraseToAnyPublisher()
+    }
+
     // TODO: Switch this to assets.
     func exportOperation(photo: Photo, directoryUrl: URL) throws -> Operation {
         switch photo.asset.mediaType {
         case .image:
-            return ExportTask(photo: photo, url: directoryUrl)
+            return FutureOperation { self.exportImage(asset: photo.asset, directoryUrl: directoryUrl) }
         case .video:
             return FutureOperation { self.exportVideo(asset: photo.asset, directoryUrl: directoryUrl) }
         default:
