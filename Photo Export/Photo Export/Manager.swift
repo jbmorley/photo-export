@@ -73,7 +73,7 @@ class Manager: NSObject, ObservableObject {
         var photos: [Photo] = []
         allPhotos.enumerateObjects { asset, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
-            photos.append(Photo(manager: self, asset: asset))
+            photos.append(Photo(asset: asset))
         }
         self.photos = photos
 
