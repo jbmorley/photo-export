@@ -20,32 +20,28 @@ extension Data {
         return CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any]
     }
 
-    func set(title: String) -> Data? {
+    func set(title: String) throws -> Data {
 
         guard let imageSource = imageSource else {
-            return nil
+            throw ManagerError.invalidData
         }
 
         guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [AnyHashable: Any] else {
-            print("unable to get properties")
-            return nil
+            throw ManagerError.missingProperties
         }
 
         var mutableProperties = properties
         if var mutableExif = (properties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any] {
             mutableExif[kCGImagePropertyExifUserComment as String] = title
-            print(kCGImagePropertyExifUserComment)
             mutableProperties[kCGImagePropertyExifDictionary] = mutableExif
         }
         if var mutableIPTC = (properties[(kCGImagePropertyIPTCDictionary as String)]) as? [AnyHashable: Any] {
             mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
-            print(kCGImagePropertyIPTCObjectName);
             mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = title
             mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
         } else {
             var mutableIPTC: [AnyHashable: String] = [:]
             mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
-            print(kCGImagePropertyIPTCObjectName);
             mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = title
             mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
         }
@@ -55,8 +51,7 @@ extension Data {
         }
 
         guard let uti = CGImageSourceGetType(imageSource) else {
-            print("Unable to determine image source type")
-            return nil
+            throw ManagerError.unknownImageType
         }
 
         let data = NSMutableData()

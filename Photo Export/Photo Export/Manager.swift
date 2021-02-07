@@ -24,6 +24,9 @@ enum ManagerError: Error {
     case unknown
     case unsupportedMediaType
     case invalidExtension
+    case missingProperties
+    case unknownImageType
+    case invalidData
 }
 
 class Manager: NSObject, ObservableObject {
@@ -167,7 +170,7 @@ class Manager: NSObject, ObservableObject {
             .receive(on: DispatchQueue.global(qos: .background))
             .zip(metadata(for: asset))
             .tryMap { details, metadata -> AssetDetails in
-                return details.set(data: details.data.set(title: metadata.title ?? "")!)
+                return details.set(data: try details.data.set(title: metadata.title ?? ""))
             }
             .tryMap { details in
                 guard let pathExtension = details.fileExtension else {
