@@ -169,18 +169,13 @@ class Manager: NSObject, ObservableObject {
         }
     }
 
-    func metadata(for asset: PHAsset) throws -> PhotoMetadata {
-        // TODO: Consider making this a Promise.
-        let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
-        let library = PhotoLibrary(url: libraryUrl)
-        return try library.metadata(for: asset.databaseUUID)
-    }
-
-    func asyncMetadata(for asset: PHAsset) -> Future<PhotoMetadata, Error> {
+    func metadata(for asset: PHAsset) -> Future<PhotoMetadata, Error> {
         return Future<PhotoMetadata, Error>.init { promise in
             DispatchQueue.main.async {
                 do {
-                    let metadata = try self.metadata(for: asset)
+                    let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
+                    let library = PhotoLibrary(url: libraryUrl)
+                    let metadata = try library.metadata(for: asset.databaseUUID)
                     promise(.success(metadata))
                 } catch {
                     promise(.failure(error))
@@ -232,7 +227,7 @@ class Manager: NSObject, ObservableObject {
                                                       options: options,
                                                       exportPreset: availablePresets[0])
             .map { $0.session }
-            .zip(asyncMetadata(for: asset))
+            .zip(metadata(for: asset))
             .flatMap { session, metadata -> Future<Bool, Error> in
 
                 let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: metadata.title ?? "")
@@ -256,7 +251,7 @@ class Manager: NSObject, ObservableObject {
     func export(image asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
         return image(for: asset)
             .receive(on: DispatchQueue.global(qos: .background))
-            .zip(asyncMetadata(for: asset))
+            .zip(metadata(for: asset))
             .tryMap { details, metadata -> AssetDetails in
                 return details.set(data: details.data.set(title: metadata.title ?? "")!)
             }
