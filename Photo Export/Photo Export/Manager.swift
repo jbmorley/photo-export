@@ -31,7 +31,7 @@ class Manager: NSObject, ObservableObject {
     // TODO: Support setting the photo library.
 
     @Published var requiresAuthorization = true
-    @Published var photos: [Photo] = []
+    @Published var photos: [PHAsset] = []
     @Published var collections: [Collection] = []
 
     let imageManager = PHCachingImageManager()
@@ -70,10 +70,10 @@ class Manager: NSObject, ObservableObject {
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         let allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
-        var photos: [Photo] = []
+        var photos: [PHAsset] = []
         allPhotos.enumerateObjects { asset, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
-            photos.append(Photo(asset: asset))
+            photos.append(asset)
         }
         self.photos = photos
 
@@ -194,7 +194,7 @@ class Manager: NSObject, ObservableObject {
             .eraseToAnyPublisher()
     }
 
-    func export(_ photos: [Photo]) throws {
+    func export(_ assets: [PHAsset]) throws {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true
@@ -203,8 +203,7 @@ class Manager: NSObject, ObservableObject {
             print("export cancelled")
             return
         }
-        let tasks = try photos
-            .map { $0.asset }
+        let tasks = try assets
             .map { asset -> FutureOperation in
             switch asset.mediaType {
             case .image:

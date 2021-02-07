@@ -12,7 +12,7 @@ class Collection: ObservableObject, Identifiable {
 
     var id: String { collection.id }
 
-    @Published var photos: [Photo] = []
+    @Published var photos: [PHAsset] = []
 
     weak var manager: Manager?
     var collection: PHAssetCollection
@@ -31,7 +31,7 @@ class Collection: ObservableObject, Identifiable {
         let result = PHAsset.fetchAssets(in: collection, options: options)
         result.enumerateObjects { asset, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
-            self.photos.append(Photo(asset: asset))
+            self.photos.append(asset)
         }
     }
 

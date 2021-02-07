@@ -5,6 +5,7 @@
 //  Created by Jason Barrie Morley on 04/02/2021.
 //
 
+import Photos
 import SwiftUI
 
 struct CollectionView: View {
@@ -16,17 +17,17 @@ struct CollectionView: View {
     static let spacing: CGFloat = 8
     let columns = [GridItem(.adaptive(minimum: 200, maximum: 200), spacing: spacing)]
 
-    var photos: [Photo] { collection.photos.filter { !showOnlyFavorites || $0.asset.isFavorite } }
+    var assets: [PHAsset] { collection.photos.filter { !showOnlyFavorites || $0.isFavorite } }
 
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: Self.spacing) {
-                ForEach(photos) { photo in
-                    Thumbnail(manager: manager, photo: photo)
+                ForEach(assets) { asset in
+                    Thumbnail(manager: manager, asset: asset)
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
                                 do {
-                                    try manager.export([photo])
+                                    try manager.export([asset])
                                 } catch {
                                     print("failed to export asset with error \(error)")
                                 }
@@ -42,7 +43,7 @@ struct CollectionView: View {
             ToolbarItem {
                 Button {
                     do {
-                        try manager.export(photos)
+                        try manager.export(assets)
                     } catch {
                         print("failed to export assets with error \(error)")
                     }
