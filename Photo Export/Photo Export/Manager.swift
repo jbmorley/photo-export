@@ -23,6 +23,7 @@ extension EnvironmentValues {
 enum ManagerError: Error {
     case unknown
     case unsupportedMediaType
+    case invalidExtension
 }
 
 class Manager: NSObject, ObservableObject {
@@ -182,7 +183,7 @@ class Manager: NSObject, ObservableObject {
             }
             .tryMap { details in
                 guard let pathExtension = details.fileExtension else {
-                    throw PhotoError.invalidExtension
+                    throw ManagerError.invalidExtension
                 }
                 let destinationUrl = directoryUrl
                     .appendingPathComponent(asset.originalFilename.deletingPathExtension)

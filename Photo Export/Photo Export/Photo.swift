@@ -9,10 +9,6 @@ import Combine
 import Foundation
 import Photos
 
-enum PhotoError: Error {
-    case invalidExtension
-}
-
 class Photo: Identifiable {
 
     let manager: Manager
