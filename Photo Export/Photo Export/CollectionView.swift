@@ -32,7 +32,9 @@ struct CollectionView: View {
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
                                 do {
-                                    try manager.export([asset])
+                                    var options = ExportOptions()
+                                    options.overwriteExisting = true
+                                    try manager.export([asset], options: options)
                                 } catch {
                                     print("failed to export asset with error \(error)")
                                 }
@@ -48,7 +50,9 @@ struct CollectionView: View {
             ToolbarItem {
                 Button {
                     do {
-                        try manager.export(assets)
+                        var options = ExportOptions()
+                        options.overwriteExisting = true
+                        try manager.export(assets, options: options)
                     } catch {
                         print("failed to export assets with error \(error)")
                     }

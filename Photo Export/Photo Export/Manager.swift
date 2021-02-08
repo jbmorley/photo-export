@@ -27,6 +27,13 @@ enum ManagerError: Error {
     case missingProperties
     case unknownImageType
     case invalidData
+    case fileExists(url: URL)
+}
+
+struct ExportOptions {
+
+    var overwriteExisting = false
+
 }
 
 class Manager: NSObject, ObservableObject {
@@ -139,9 +146,9 @@ class Manager: NSObject, ObservableObject {
 
         let availablePresets = AVAssetExportSession.allExportPresets()
 
-        let options = PHVideoRequestOptions()
+        let videoRequestOptions = PHVideoRequestOptions()
         return self.imageManager.requestExportSession(video: asset,
-                                                      options: options,
+                                                      options: videoRequestOptions,
                                                       exportPreset: availablePresets[0])
             .map { $0.session }
             .zip(metadata(for: asset))
@@ -170,11 +177,21 @@ class Manager: NSObject, ObservableObject {
 
                 let outputFileType = session.supportedFileTypes[0]
                 let outputPathExtension = outputFileType.pathExtension
-
-                session.outputFileType = outputFileType
-                session.outputURL = directoryUrl
+                let destinationUrl = directoryUrl
                     .appendingPathComponent(asset.originalFilename.deletingPathExtension)
                     .appendingPathExtension(outputPathExtension)
+//
+//                let fileManager = FileManager.default
+//                if fileManager.fileExists(atPath: destinationUrl.path) {
+//                    if options.overwriteExisting {
+//                        try fileManager.removeItem(at: destinationUrl)
+//                    } else {
+//                        throw ManagerError.fileExists(url: destinationUrl)
+//                    }
+//                }
+
+                session.outputFileType = outputFileType
+                session.outputURL = destinationUrl
 
                 return session.export()
             }
@@ -182,7 +199,7 @@ class Manager: NSObject, ObservableObject {
 
     }
 
-    func export(image asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
+    func export(image asset: PHAsset, directoryUrl: URL, options: ExportOptions) -> AnyPublisher<Bool, Error> {
         return image(for: asset)
             .receive(on: DispatchQueue.global(qos: .background))
             .zip(metadata(for: asset))
@@ -196,13 +213,23 @@ class Manager: NSObject, ObservableObject {
                 let destinationUrl = directoryUrl
                     .appendingPathComponent(asset.originalFilename.deletingPathExtension)
                     .appendingPathExtension(pathExtension)
+
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: destinationUrl.path) {
+                    if options.overwriteExisting {
+                        try fileManager.removeItem(at: destinationUrl)
+                    } else {
+                        throw ManagerError.fileExists(url: destinationUrl)
+                    }
+                }
+
                 try details.data.write(to: destinationUrl)
                 return true
             }
             .eraseToAnyPublisher()
     }
 
-    func export(_ assets: [PHAsset]) throws {
+    func export(_ assets: [PHAsset], options: ExportOptions) throws {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true
@@ -215,7 +242,7 @@ class Manager: NSObject, ObservableObject {
             .map { asset -> FutureOperation in
             switch asset.mediaType {
             case .image:
-                return FutureOperation { self.export(image: asset, directoryUrl: url) }
+                return FutureOperation { self.export(image: asset, directoryUrl: url, options: options) }
             case .video:
                 return FutureOperation { self.export(video: asset, directoryUrl: url) }
             default:
