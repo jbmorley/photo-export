@@ -147,16 +147,26 @@ class Manager: NSObject, ObservableObject {
             .zip(metadata(for: asset))
             .flatMap { session, metadata -> Future<Bool, Error> in
 
-                // TODO: Ensure the nullable dates are safe.
-                let metadata = [
-                    self.makeMetadataItem(.commonIdentifierTitle, value: metadata.title ?? ""),
-                    self.makeMetadataItem(.commonIdentifierDescription, value: metadata.caption ?? ""),
-                    self.makeMetadataItem(.commonIdentifierCreationDate, value: asset.creationDate),
-                    self.makeMetadataItem(.quickTimeMetadataCreationDate, value: asset.creationDate),
-                    self.makeMetadataItem(.commonIdentifierLastModifiedDate, value: asset.modificationDate),
-                    self.makeMetadataItem(.commonIdentifierLastModifiedDate, value: asset.modificationDate),
-                ]
-                session.metadata = metadata
+                var metadataItems: [AVMetadataItem] = []
+                if let title = metadata.title {
+                    metadataItems.append(self.makeMetadataItem(.commonIdentifierTitle,
+                                                               value: title))
+                }
+                if let caption = metadata.caption {
+                    metadataItems.append(self.makeMetadataItem(.commonIdentifierDescription,
+                                                               value: caption))
+                }
+                if let creationDate = asset.creationDate {
+                    metadataItems.append(self.makeMetadataItem(.commonIdentifierCreationDate,
+                                                               value: creationDate))
+                    metadataItems.append(self.makeMetadataItem(.quickTimeMetadataCreationDate,
+                                                               value: creationDate))
+                }
+                if let modificationDate = asset.modificationDate {
+                    metadataItems.append(self.makeMetadataItem(.commonIdentifierLastModifiedDate,
+                                                               value: modificationDate))
+                }
+                session.metadata = metadataItems
 
                 let outputFileType = session.supportedFileTypes[0]
                 let outputPathExtension = outputFileType.pathExtension
