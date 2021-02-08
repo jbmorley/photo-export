@@ -142,7 +142,7 @@ class Manager: NSObject, ObservableObject {
         return item.copy() as! AVMetadataItem
     }
 
-    func export(video asset: PHAsset, directoryUrl: URL) -> AnyPublisher<Bool, Error> {
+    func export(video asset: PHAsset, directoryUrl: URL, options: ExportOptions) -> AnyPublisher<Bool, Error> {
 
         let availablePresets = AVAssetExportSession.allExportPresets()
 
@@ -244,7 +244,7 @@ class Manager: NSObject, ObservableObject {
             case .image:
                 return FutureOperation { self.export(image: asset, directoryUrl: url, options: options) }
             case .video:
-                return FutureOperation { self.export(video: asset, directoryUrl: url) }
+                return FutureOperation { self.export(video: asset, directoryUrl: url, options: options) }
             default:
                 throw ManagerError.unsupportedMediaType
             }
