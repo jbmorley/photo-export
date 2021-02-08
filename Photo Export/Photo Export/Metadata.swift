@@ -11,5 +11,6 @@ struct Metadata {
 
     let title: String?
     let caption: String?
+    let timeZone: String?
 
 }

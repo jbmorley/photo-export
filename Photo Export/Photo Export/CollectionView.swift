@@ -26,6 +26,8 @@ struct CollectionView: View {
                     Thumbnail(manager: manager, asset: asset)
                         .onTapGesture {
                             print(asset.databaseUUID)
+                            print(asset.creationDate ?? "nil")
+                            print(asset.modificationDate ?? "nil")
                         }
                         .contextMenu(ContextMenu(menuItems: {
                             Button {

@@ -23,6 +23,7 @@ class PhotoLibrary {
 
     init(url: URL) {
         self.url = url
+        // TODO: Append the internal path components here.
     }
 
     func metadata(for id: String) throws -> Metadata {
@@ -49,7 +50,19 @@ class PhotoLibrary {
         }
 
         var statement: OpaquePointer?
-        if sqlite3_prepare_v2(db, "SELECT ZADDITIONALASSETATTRIBUTES.ZTITLE, ZADDITIONALASSETATTRIBUTES.ZACCESSIBILITYDESCRIPTION FROM ZASSET JOIN ZADDITIONALASSETATTRIBUTES ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK where ZUUID = ?", -1, &statement, nil) != SQLITE_OK {
+        if sqlite3_prepare_v2(db, """
+            SELECT
+                ZADDITIONALASSETATTRIBUTES.ZTITLE,
+                ZADDITIONALASSETATTRIBUTES.ZACCESSIBILITYDESCRIPTION,
+                ZADDITIONALASSETATTRIBUTES.ZTIMEZONENAME
+            FROM
+                ZASSET
+                JOIN
+                    ZADDITIONALASSETATTRIBUTES
+                ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK
+            WHERE
+                ZUUID = ?
+""", -1, &statement, nil) != SQLITE_OK {
             let errorMessage = String(cString: sqlite3_errmsg(db)!)
             throw PhotoLibraryError.sqlError(message: errorMessage)
         }
@@ -61,6 +74,7 @@ class PhotoLibrary {
 
         var title: String?
         var description: String?
+        var timeZone: String?
 
         defer {
             print("finalizing the statement")
@@ -75,19 +89,18 @@ class PhotoLibrary {
         while sqlite3_step(statement) == SQLITE_ROW {
             if let cString = sqlite3_column_text(statement, 0) {
                 title = String(cString: cString)
-                print("title = \(title ?? "?")")
-            } else {
-                print("title not found")
             }
             if let cString = sqlite3_column_text(statement, 1) {
                 description = String(cString: cString)
-                print("description = \(description ?? "?")")
-            } else {
-                print("description not found")
+            }
+            if let cString = sqlite3_column_text(statement, 2) {
+                timeZone = String(cString: cString)
             }
         }
 
-        return Metadata(title: title, caption: description)
+        return Metadata(title: title,
+                        caption: description,
+                        timeZone: timeZone)
     }
 
 }

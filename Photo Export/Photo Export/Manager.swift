@@ -147,9 +147,16 @@ class Manager: NSObject, ObservableObject {
             .zip(metadata(for: asset))
             .flatMap { session, metadata -> Future<Bool, Error> in
 
-                let titleItem = self.makeMetadataItem(.commonIdentifierTitle, value: metadata.title ?? "")
-                let descItem = self.makeMetadataItem(.commonIdentifierDescription, value: metadata.caption ?? "")
-                session.metadata = [titleItem, descItem]
+                // TODO: Ensure the nullable dates are safe.
+                let metadata = [
+                    self.makeMetadataItem(.commonIdentifierTitle, value: metadata.title ?? ""),
+                    self.makeMetadataItem(.commonIdentifierDescription, value: metadata.caption ?? ""),
+                    self.makeMetadataItem(.commonIdentifierCreationDate, value: asset.creationDate),
+                    self.makeMetadataItem(.quickTimeMetadataCreationDate, value: asset.creationDate),
+                    self.makeMetadataItem(.commonIdentifierLastModifiedDate, value: asset.modificationDate),
+                    self.makeMetadataItem(.commonIdentifierLastModifiedDate, value: asset.modificationDate),
+                ]
+                session.metadata = metadata
 
                 let outputFileType = session.supportedFileTypes[0]
                 let outputPathExtension = outputFileType.pathExtension

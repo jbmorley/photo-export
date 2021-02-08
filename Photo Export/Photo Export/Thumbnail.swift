@@ -15,10 +15,6 @@ struct Thumbnail: View {
 
     @State var image: NSImage? = nil
 
-    var heart: String {
-        asset.isFavorite ? "❤️" : "..."
-    }
-
     var body: some View {
         VStack {
             HStack {
@@ -29,8 +25,6 @@ struct Thumbnail: View {
                 }
             }
             .frame(width: 200, height: 200)
-            Text("\(heart)")
-                .lineLimit(1)
         }
         .onAppear(perform: {
             manager.imageManager.requestImage(for: asset,
