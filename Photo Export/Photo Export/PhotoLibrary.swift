@@ -9,13 +9,6 @@ import Combine
 import Foundation
 import SQLite3
 
-struct PhotoMetadata {
-
-    let title: String?
-    let caption: String?
-
-}
-
 let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 
@@ -32,7 +25,7 @@ class PhotoLibrary {
         self.url = url
     }
 
-    func metadata(for id: String) throws -> PhotoMetadata {
+    func metadata(for id: String) throws -> Metadata {
 
         guard FileManager.default.fileExists(atPath: self.url.path) else {
             throw PhotoLibraryError.notFound
@@ -56,7 +49,7 @@ class PhotoLibrary {
         }
 
         var statement: OpaquePointer?
-        if sqlite3_prepare_v2(db, "SELECT ZADDITIONALASSETATTRIBUTES.ZTITLE FROM ZASSET JOIN ZADDITIONALASSETATTRIBUTES ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK where ZUUID = ?", -1, &statement, nil) != SQLITE_OK {
+        if sqlite3_prepare_v2(db, "SELECT ZADDITIONALASSETATTRIBUTES.ZTITLE, ZADDITIONALASSETATTRIBUTES.ZACCESSIBILITYDESCRIPTION FROM ZASSET JOIN ZADDITIONALASSETATTRIBUTES ON ZADDITIONALASSETATTRIBUTES.ZASSET = ZASSET.Z_PK where ZUUID = ?", -1, &statement, nil) != SQLITE_OK {
             let errorMessage = String(cString: sqlite3_errmsg(db)!)
             throw PhotoLibraryError.sqlError(message: errorMessage)
         }
@@ -66,7 +59,8 @@ class PhotoLibrary {
             throw PhotoLibraryError.sqlError(message: errorMessage)
         }
 
-        var name: String?
+        var title: String?
+        var description: String?
 
         defer {
             print("finalizing the statement")
@@ -80,14 +74,20 @@ class PhotoLibrary {
         // TODO: This expects just one row, so we should be able to guard this better
         while sqlite3_step(statement) == SQLITE_ROW {
             if let cString = sqlite3_column_text(statement, 0) {
-                name = String(cString: cString)
-                print("name = \(name ?? "?")")
+                title = String(cString: cString)
+                print("title = \(title ?? "?")")
             } else {
-                print("name not found")
+                print("title not found")
+            }
+            if let cString = sqlite3_column_text(statement, 1) {
+                description = String(cString: cString)
+                print("description = \(description ?? "?")")
+            } else {
+                print("description not found")
             }
         }
 
-        return PhotoMetadata(title: name, caption: name)
+        return Metadata(title: title, caption: description)
     }
 
 }

@@ -20,7 +20,7 @@ extension Data {
         return CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any]
     }
 
-    func set(title: String) throws -> Data {
+    func set(metadata: Metadata) throws -> Data {
 
         guard let imageSource = imageSource else {
             throw ManagerError.invalidData
@@ -31,23 +31,23 @@ extension Data {
         }
 
         var mutableProperties = properties
-        if var mutableExif = (properties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any] {
-            mutableExif[kCGImagePropertyExifUserComment as String] = title
-            mutableProperties[kCGImagePropertyExifDictionary] = mutableExif
-        }
         if var mutableIPTC = (properties[(kCGImagePropertyIPTCDictionary as String)]) as? [AnyHashable: Any] {
-            mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
-            mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = title
+            if let title = metadata.title {
+                mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
+            }
+            if let caption = metadata.caption {
+                mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = caption
+            }
             mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
         } else {
             var mutableIPTC: [AnyHashable: String] = [:]
-            mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
-            mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = title
+            if let title = metadata.title {
+                mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
+            }
+            if let caption = metadata.caption {
+                mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = caption
+            }
             mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
-        }
-        if var mutableTIFF = (properties[(kCGImagePropertyTIFFDictionary as String)]) as? [AnyHashable: Any] {
-            mutableTIFF[kCGImagePropertyTIFFImageDescription as String] = title
-            mutableProperties[kCGImagePropertyTIFFDictionary] = mutableTIFF
         }
 
         guard let uti = CGImageSourceGetType(imageSource) else {

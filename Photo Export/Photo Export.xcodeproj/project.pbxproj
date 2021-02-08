@@ -26,6 +26,7 @@
 		D8CF3C1525D0932900F41DD4 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1425D0932900F41DD4 /* TaskManager.swift */; };
 		D8CF3C1A25D0934900F41DD4 /* AVAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1925D0934900F41DD4 /* AVAsset.swift */; };
 		D8CF3C1F25D0951400F41DD4 /* FutureOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */; };
+		D8CF3C2725D09B5500F41DD4 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C2625D09B5500F41DD4 /* Metadata.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		D8CF3C1425D0932900F41DD4 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		D8CF3C1925D0934900F41DD4 /* AVAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAsset.swift; sourceTree = "<group>"; };
 		D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureOperation.swift; sourceTree = "<group>"; };
+		D8CF3C2625D09B5500F41DD4 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 				D8C8899925CCA369009E54C0 /* AssetDetails.swift */,
 				D8CF3C1425D0932900F41DD4 /* TaskManager.swift */,
 				D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */,
+				D8CF3C2625D09B5500F41DD4 /* Metadata.swift */,
 			);
 			path = "Photo Export";
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				D8C8898025CC815A009E54C0 /* String.swift in Sources */,
 				D8080F6E25CA09A500E2511D /* PhotoLibrary.swift in Sources */,
 				D8080F6125CA066E00E2511D /* Data.swift in Sources */,
+				D8CF3C2725D09B5500F41DD4 /* Metadata.swift in Sources */,
 				D8C8898525CC825A009E54C0 /* Collection.swift in Sources */,
 				D8CF3C1F25D0951400F41DD4 /* FutureOperation.swift in Sources */,
 				D8CF3C1025D06E5D00F41DD4 /* PHImageManager.swift in Sources */,

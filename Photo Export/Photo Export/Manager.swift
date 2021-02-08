@@ -87,8 +87,8 @@ class Manager: NSObject, ObservableObject {
         }
     }
 
-    func metadata(for asset: PHAsset) -> Future<PhotoMetadata, Error> {
-        return Future<PhotoMetadata, Error>.init { promise in
+    func metadata(for asset: PHAsset) -> Future<Metadata, Error> {
+        return Future<Metadata, Error>.init { promise in
             DispatchQueue.main.async {
                 do {
                     let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
@@ -170,7 +170,7 @@ class Manager: NSObject, ObservableObject {
             .receive(on: DispatchQueue.global(qos: .background))
             .zip(metadata(for: asset))
             .tryMap { details, metadata -> AssetDetails in
-                return details.set(data: try details.data.set(title: metadata.title ?? ""))
+                return details.set(data: try details.data.set(metadata: metadata))
             }
             .tryMap { details in
                 guard let pathExtension = details.fileExtension else {

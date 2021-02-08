@@ -24,6 +24,9 @@ struct CollectionView: View {
             LazyVGrid(columns: columns, spacing: Self.spacing) {
                 ForEach(assets) { asset in
                     Thumbnail(manager: manager, asset: asset)
+                        .onTapGesture {
+                            print(asset.databaseUUID)
+                        }
                         .contextMenu(ContextMenu(menuItems: {
                             Button {
                                 do {
