@@ -98,7 +98,7 @@ class Manager: NSObject, ObservableObject {
         return Future<Metadata, Error>.init { promise in
             DispatchQueue.main.async {
                 do {
-                    let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary/database/Photos.sqlite")
+                    let libraryUrl = URL(fileURLWithPath: "/Users/jbmorley/Pictures/Photos Library.photoslibrary")
                     let library = PhotoLibrary(url: libraryUrl)
                     let metadata = try library.metadata(for: asset.databaseUUID)
                     promise(.success(metadata))
