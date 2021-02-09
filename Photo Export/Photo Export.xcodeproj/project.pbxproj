@@ -27,6 +27,7 @@
 		D8CF3C1A25D0934900F41DD4 /* AVAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1925D0934900F41DD4 /* AVAsset.swift */; };
 		D8CF3C1F25D0951400F41DD4 /* FutureOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */; };
 		D8CF3C2725D09B5500F41DD4 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C2625D09B5500F41DD4 /* Metadata.swift */; };
+		D8DA435A25D2D8C50015F6FB /* CLLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA435925D2D8C50015F6FB /* CLLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		D8CF3C1925D0934900F41DD4 /* AVAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAsset.swift; sourceTree = "<group>"; };
 		D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureOperation.swift; sourceTree = "<group>"; };
 		D8CF3C2625D09B5500F41DD4 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
+		D8DA435925D2D8C50015F6FB /* CLLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				D8C889A325CCAC59009E54C0 /* PHAsset.swift */,
 				D8CF3C0F25D06E5D00F41DD4 /* PHImageManager.swift */,
 				D8CF3C1925D0934900F41DD4 /* AVAsset.swift */,
+				D8DA435925D2D8C50015F6FB /* CLLocation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				D8080F6E25CA09A500E2511D /* PhotoLibrary.swift in Sources */,
 				D8080F6125CA066E00E2511D /* Data.swift in Sources */,
 				D8CF3C2725D09B5500F41DD4 /* Metadata.swift in Sources */,
+				D8DA435A25D2D8C50015F6FB /* CLLocation.swift in Sources */,
 				D8C8898525CC825A009E54C0 /* Collection.swift in Sources */,
 				D8CF3C1F25D0951400F41DD4 /* FutureOperation.swift in Sources */,
 				D8CF3C1025D06E5D00F41DD4 /* PHImageManager.swift in Sources */,

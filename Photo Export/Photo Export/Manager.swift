@@ -151,8 +151,34 @@ class Manager: NSObject, ObservableObject {
                                                       options: videoRequestOptions,
                                                       exportPreset: availablePresets[0])
             .map { $0.session }
+            .tryMap({ session -> AVAssetExportSession in
+
+                // Configure the output destination.
+
+                let outputFileType = session.supportedFileTypes[0]
+                let outputPathExtension = outputFileType.pathExtension
+                let destinationUrl = directoryUrl
+                    .appendingPathComponent(asset.originalFilename.deletingPathExtension)
+                    .appendingPathExtension(outputPathExtension)
+
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: destinationUrl.path) {
+                    if options.overwriteExisting {
+                        try fileManager.removeItem(at: destinationUrl)
+                    } else {
+                        throw ManagerError.fileExists(url: destinationUrl)
+                    }
+                }
+
+                session.outputFileType = outputFileType
+                session.outputURL = destinationUrl
+
+                return session
+            })
             .zip(metadata(for: asset))
             .flatMap { session, metadata -> Future<Bool, Error> in
+
+                // Set the metadata and start the export.
 
                 var metadataItems: [AVMetadataItem] = []
                 if let title = metadata.title {
@@ -173,25 +199,14 @@ class Manager: NSObject, ObservableObject {
                     metadataItems.append(self.makeMetadataItem(.commonIdentifierLastModifiedDate,
                                                                value: modificationDate))
                 }
+                if let location = asset.location {
+                    print(location.iso6809Representation)
+                    metadataItems.append(self.makeMetadataItem(.commonIdentifierLocation,
+                                                               value: location.iso6809Representation))
+                    metadataItems.append(self.makeMetadataItem(.quickTimeMetadataLocationISO6709,
+                                                               value: location.iso6809Representation))
+                }
                 session.metadata = metadataItems
-
-                let outputFileType = session.supportedFileTypes[0]
-                let outputPathExtension = outputFileType.pathExtension
-                let destinationUrl = directoryUrl
-                    .appendingPathComponent(asset.originalFilename.deletingPathExtension)
-                    .appendingPathExtension(outputPathExtension)
-//
-//                let fileManager = FileManager.default
-//                if fileManager.fileExists(atPath: destinationUrl.path) {
-//                    if options.overwriteExisting {
-//                        try fileManager.removeItem(at: destinationUrl)
-//                    } else {
-//                        throw ManagerError.fileExists(url: destinationUrl)
-//                    }
-//                }
-
-                session.outputFileType = outputFileType
-                session.outputURL = destinationUrl
 
                 return session.export()
             }
