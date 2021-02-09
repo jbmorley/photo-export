@@ -17,11 +17,15 @@ struct Thumbnail: View {
 
     var body: some View {
         VStack {
-            HStack {
+            ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom)) {
                 if let image = image {
                     Image(nsImage: image)
                         .fixedSize()
-                        .frame(width: 200, height: 200)
+                }
+                if asset.isFavorite {
+                    Image(systemName: "heart.fill")
+                        .shadow(radius: 5)
+                        .padding(8)
                 }
             }
             .frame(width: 200, height: 200)
