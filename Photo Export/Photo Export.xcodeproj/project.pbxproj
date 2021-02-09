@@ -28,6 +28,8 @@
 		D8CF3C1F25D0951400F41DD4 /* FutureOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */; };
 		D8CF3C2725D09B5500F41DD4 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CF3C2625D09B5500F41DD4 /* Metadata.swift */; };
 		D8DA435A25D2D8C50015F6FB /* CLLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA435925D2D8C50015F6FB /* CLLocation.swift */; };
+		D8DA437025D330940015F6FB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DA437225D330940015F6FB /* Localizable.strings */; };
+		D8DA437625D330B20015F6FB /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = D8DA437825D330B20015F6FB /* Localizable.stringsdict */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +78,10 @@
 		D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureOperation.swift; sourceTree = "<group>"; };
 		D8CF3C2625D09B5500F41DD4 /* Metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		D8DA435925D2D8C50015F6FB /* CLLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocation.swift; sourceTree = "<group>"; };
+		D8DA437125D330940015F6FB /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D8DA437725D330B20015F6FB /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "en-GB"; path = "en-GB.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		D8DA437C25D330FE0015F6FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		D8DA438025D331C70015F6FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +161,8 @@
 				D8CF3C1425D0932900F41DD4 /* TaskManager.swift */,
 				D8CF3C1E25D0951400F41DD4 /* FutureOperation.swift */,
 				D8CF3C2625D09B5500F41DD4 /* Metadata.swift */,
+				D8DA437825D330B20015F6FB /* Localizable.stringsdict */,
+				D8DA437225D330940015F6FB /* Localizable.strings */,
 			);
 			path = "Photo Export";
 			sourceTree = "<group>";
@@ -270,6 +278,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"en-GB",
 			);
 			mainGroup = D88D65AD25C5F6990002D434;
 			productRefGroup = D88D65B725C5F6990002D434 /* Products */;
@@ -289,7 +298,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D88D65C125C5F69A0002D434 /* Preview Assets.xcassets in Resources */,
+				D8DA437025D330940015F6FB /* Localizable.strings in Resources */,
 				D88D65BE25C5F69A0002D434 /* Assets.xcassets in Resources */,
+				D8DA437625D330B20015F6FB /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +375,27 @@
 			targetProxy = D88D65D425C5F69B0002D434 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D8DA437225D330940015F6FB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8DA437125D330940015F6FB /* en-GB */,
+				D8DA438025D331C70015F6FB /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		D8DA437825D330B20015F6FB /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8DA437725D330B20015F6FB /* en-GB */,
+				D8DA437C25D330FE0015F6FB /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		D88D65DA25C5F69B0002D434 /* Debug */ = {

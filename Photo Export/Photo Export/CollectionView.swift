@@ -23,6 +23,24 @@ struct CollectionView: View {
     var videoCount: Int { collection.assets.filter { $0.mediaType == .video }.count }
     var favoriteCount: Int { collection.assets.filter { $0.isFavorite }.count }
 
+    var imageCountString: String {
+        NSString.localizedStringWithFormat(NSLocalizedString("%lld images", comment: "Cheese") as NSString, imageCount) as String
+    }
+
+    var videoCountString: String {
+        NSString.localizedStringWithFormat(NSLocalizedString("%lld videos", comment: "Cheese") as NSString, videoCount) as String
+    }
+
+    var favoriteCountString: String {
+        NSString.localizedStringWithFormat(NSLocalizedString("%lld favorites", comment: "Cheese") as NSString, favoriteCount) as String
+    }
+
+    var summary: String {
+
+        [imageCountString, videoCountString, favoriteCountString].joined(separator: NSLocalizedString("LIST_SEPARATOR", comment: "list separator"))
+
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -52,7 +70,7 @@ struct CollectionView: View {
                 .padding()
             }
             Divider()
-            Text("\(imageCount) Images · \(videoCount) Videos · \(favoriteCount) Favorites")
+            Text(summary)
                 .padding()
         }
         .toolbar {
