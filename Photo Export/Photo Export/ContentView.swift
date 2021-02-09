@@ -25,17 +25,13 @@ struct ContentView: View {
                         NavigationLink(collection.localizedTitle, destination: CollectionView(manager: manager, collection: collection))
                     }
                 }
-                HStack {
-                    Text("\(manager.taskManager.queue.operationCount) operations")
-                        .padding()
-                    Spacer()
-                }
             }
             VStack {
                 if manager.requiresAuthorization {
                     Button {
                         manager.authorize()
                     } label: {
+                        // TODO: Don't use a button for this.
                         Text("Authorize")
                     }
                     .padding()
