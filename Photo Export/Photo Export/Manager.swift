@@ -255,14 +255,19 @@ class Manager: NSObject, ObservableObject {
         }
         let tasks = try assets
             .map { asset -> FutureOperation in
-            switch asset.mediaType {
-            case .image:
-                return FutureOperation { self.export(image: asset, directoryUrl: url, options: options) }
-            case .video:
-                return FutureOperation { self.export(video: asset, directoryUrl: url, options: options) }
-            default:
-                throw ManagerError.unsupportedMediaType
-            }
+                let title = asset.originalFilename.deletingPathExtension
+                switch asset.mediaType {
+                case .image:
+                    return FutureOperation(title: title) { self.export(image: asset,
+                                                                       directoryUrl: url,
+                                                                       options: options) }
+                case .video:
+                    return FutureOperation(title: title) { self.export(video: asset,
+                                                                       directoryUrl: url,
+                                                                       options: options) }
+                default:
+                    throw ManagerError.unsupportedMediaType
+                }
         }
         taskManager.run(tasks)
     }

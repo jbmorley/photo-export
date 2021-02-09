@@ -19,5 +19,9 @@ struct Photo_ExportApp: App {
             ContentView(manager: manager)
                 .preferredColorScheme(.dark)
         }
+        WindowGroup("Exports") {
+            ExportsView(manager: manager, taskManager: manager.taskManager)
+                .preferredColorScheme(.dark)
+        }
     }
 }

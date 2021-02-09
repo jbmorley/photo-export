@@ -30,6 +30,7 @@
 		D8DA435A25D2D8C50015F6FB /* CLLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA435925D2D8C50015F6FB /* CLLocation.swift */; };
 		D8DA437025D330940015F6FB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DA437225D330940015F6FB /* Localizable.strings */; };
 		D8DA437625D330B20015F6FB /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = D8DA437825D330B20015F6FB /* Localizable.stringsdict */; };
+		D8F38EEB25D3472700CDF99D /* ExportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F38EEA25D3472700CDF99D /* ExportsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		D8DA437725D330B20015F6FB /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "en-GB"; path = "en-GB.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		D8DA437C25D330FE0015F6FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D8DA438025D331C70015F6FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D8F38EEA25D3472700CDF99D /* ExportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 				D8CF3C2625D09B5500F41DD4 /* Metadata.swift */,
 				D8DA437825D330B20015F6FB /* Localizable.stringsdict */,
 				D8DA437225D330940015F6FB /* Localizable.strings */,
+				D8F38EEA25D3472700CDF99D /* ExportsView.swift */,
 			);
 			path = "Photo Export";
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				D8C8898A25CC86F8009E54C0 /* CollectionView.swift in Sources */,
 				D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */,
 				D8B327C925C9A98E00E01BA0 /* Manager.swift in Sources */,
+				D8F38EEB25D3472700CDF99D /* ExportsView.swift in Sources */,
 				D8CF3C1A25D0934900F41DD4 /* AVAsset.swift in Sources */,
 				D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */,
 				D8080F6625CA06A600E2511D /* Thumbnail.swift in Sources */,

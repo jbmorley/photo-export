@@ -8,7 +8,18 @@
 import Combine
 import Foundation
 
-class FutureOperation: Operation {
+class Task: Operation, Identifiable {
+
+    let title: String
+    var url: URL? = nil
+
+    init(title: String) {
+        self.title = title
+    }
+
+}
+
+class FutureOperation: Task {
 
     override var isAsynchronous: Bool { false }
     override var isExecuting: Bool { running }
@@ -19,8 +30,9 @@ class FutureOperation: Operation {
     var running = false
     var complete = false
 
-    init(block: @escaping () -> AnyPublisher<Bool, Error>) {
+    init(title: String, block: @escaping () -> AnyPublisher<Bool, Error>) {
         self.block = block
+        super.init(title: title)
     }
 
     override func start() {

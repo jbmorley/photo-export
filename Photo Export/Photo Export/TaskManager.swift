@@ -12,6 +12,7 @@ class TaskManager: NSObject, ObservableObject {
     @objc let queue = OperationQueue()
 
     var observation: NSKeyValueObservation?
+    @Published var tasks: [Task] = []
 
     override init() {
         queue.maxConcurrentOperationCount = 3
@@ -24,11 +25,13 @@ class TaskManager: NSObject, ObservableObject {
         }
     }
 
-    func run(_ task: Operation) {
+    func run(_ task: Task) {
+        tasks.append(task)
         queue.addOperation(task)
     }
 
-    func run(_ tasks: [Operation]) {
+    func run(_ tasks: [Task]) {
+        self.tasks.append(contentsOf: tasks)
         queue.addOperations(tasks, waitUntilFinished: false)
     }
 
