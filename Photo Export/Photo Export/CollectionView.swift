@@ -19,32 +19,41 @@ struct CollectionView: View {
 
     var assets: [PHAsset] { collection.assets.filter { !showOnlyFavorites || $0.isFavorite } }
 
+    var imageCount: Int { collection.assets.filter { $0.mediaType == .image }.count }
+    var videoCount: Int { collection.assets.filter { $0.mediaType == .video }.count }
+    var favoriteCount: Int { collection.assets.filter { $0.isFavorite }.count }
+
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: Self.spacing) {
-                ForEach(assets) { asset in
-                    Thumbnail(manager: manager, asset: asset)
-                        .onTapGesture {
-                            print(asset.databaseUUID)
-                            print(asset.creationDate ?? "nil")
-                            print(asset.modificationDate ?? "nil")
-                        }
-                        .contextMenu(ContextMenu(menuItems: {
-                            Button {
-                                do {
-                                    var options = ExportOptions()
-                                    options.overwriteExisting = true
-                                    try manager.export([asset], options: options)
-                                } catch {
-                                    print("failed to export asset with error \(error)")
-                                }
-                            } label: {
-                                Text("Export...")
+        VStack(spacing: 0) {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: Self.spacing) {
+                    ForEach(assets) { asset in
+                        Thumbnail(manager: manager, asset: asset)
+                            .onTapGesture {
+                                print(asset.databaseUUID)
+                                print(asset.creationDate ?? "nil")
+                                print(asset.modificationDate ?? "nil")
                             }
-                        }))
+                            .contextMenu(ContextMenu(menuItems: {
+                                Button {
+                                    do {
+                                        var options = ExportOptions()
+                                        options.overwriteExisting = true
+                                        try manager.export([asset], options: options)
+                                    } catch {
+                                        print("failed to export asset with error \(error)")
+                                    }
+                                } label: {
+                                    Text("Export...")
+                                }
+                            }))
+                    }
                 }
+                .padding()
             }
-            .padding()
+            Divider()
+            Text("\(imageCount) Images · \(videoCount) Videos · \(favoriteCount) Favorites")
+                .padding()
         }
         .toolbar {
             ToolbarItem {

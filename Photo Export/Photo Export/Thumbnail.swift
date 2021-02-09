@@ -24,7 +24,7 @@ struct Thumbnail: View {
                 }
                 if asset.isFavorite {
                     Image(systemName: "heart.fill")
-                        .shadow(radius: 5)
+                        .shadow(radius: 16)
                         .padding(8)
                 }
             }
