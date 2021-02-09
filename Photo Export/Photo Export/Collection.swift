@@ -50,20 +50,17 @@ extension Collection: PHPhotoLibraryChangeObserver {
 
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.async {
-            // TODO: Handle changes to the collection itself.
+            var contentDidChange = false
             if let change = changeInstance.changeDetails(for: self.collection) {
-                print("collection changed \(change)")
+                contentDidChange = change.assetContentChanged
             }
-
-            // TODO: We could do this with a simple reduce.
-            var didChange = false
             for asset in self.assets {
-                if let change = changeInstance.changeDetails(for: asset) {
-                    didChange = true
-                    print("asset changed \(change)")
+                if changeInstance.changeDetails(for: asset) != nil {
+                    contentDidChange = true
+                    break
                 }
             }
-            if didChange {
+            if contentDidChange {
                 self.update()
             }
         }
