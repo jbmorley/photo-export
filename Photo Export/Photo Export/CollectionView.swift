@@ -71,6 +71,7 @@ struct CollectionView: View {
             }
             Divider()
             Text(summary)
+                .foregroundColor(.secondary)
                 .padding()
         }
         .toolbar {
