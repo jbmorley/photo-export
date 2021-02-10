@@ -22,11 +22,15 @@ struct ContentView: View {
             VStack {
                 List(manager.collections, children: \.collections) { collection in
                     NavigationLink(destination: CollectionView(manager: manager, collection: collection)) {
-                        switch collection.collectionType {
-                        case .album:
-                            Label(collection.localizedTitle, systemImage: "rectangle.stack")
-                        case .folder:
-                            Label(collection.localizedTitle, systemImage: "folder")
+                        Label {
+                            Text(collection.localizedTitle)
+                        } icon: {
+                            switch collection.collectionType {
+                            case .album:
+                                Image(systemName: "rectangle.stack")
+                            case .folder:
+                                Image(systemName: "folder")
+                            }
                         }
                     }
                 }
