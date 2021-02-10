@@ -66,14 +66,26 @@ class Manager: NSObject, ObservableObject {
         PHPhotoLibrary.shared().register(self as PHPhotoLibraryAvailabilityObserver)
 
         // Get all the collections.
-        let collectionResult = PHAssetCollection.fetchTopLevelUserCollections(with: nil)
+        // These are the top-level user-defined albums.
+        let collectionResult = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+//        let collectionResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
         collectionResult.enumerateObjects { collection, index, stop in
             dispatchPrecondition(condition: .onQueue(.main))
-            guard let assetCollection = collection as? PHAssetCollection else {
-                return
-            }
-            self.collections.append(Collection(manager: self, collection: assetCollection))
+//            guard let assetCollection = collection as? PHAssetCollection else {
+//                return
+//            }
+            self.collections.append(Collection(manager: self, collection: collection))
         }
+
+        // Folders
+        // These are the top-level non-smart albums.
+//        let listResult = PHCollectionList.fetchTopLevelUserCollections(with: nil) /* PHCollectionList.fetchCollectionLists(with: .folder, subtype: .any, options: nil) */
+//        listResult.enumerateObjects { list, index, stop in
+//            print(list.localizedTitle ?? "")
+//            print(list.canContainAssets)
+//            print(list.canContainCollections)
+//        }
+
 
         cancellable = taskManager.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
@@ -142,7 +154,7 @@ class Manager: NSObject, ObservableObject {
         return item.copy() as! AVMetadataItem
     }
 
-    func export(video asset: PHAsset, directoryUrl: URL, options: ExportOptions) -> AnyPublisher<Bool, Error> {
+    func export(video asset: PHAsset, directoryUrl: URL, options: ExportOptions) -> AnyPublisher<URL, Error> {
 
         let availablePresets = AVAssetExportSession.allExportPresets()
 
@@ -176,7 +188,7 @@ class Manager: NSObject, ObservableObject {
                 return session
             })
             .zip(metadata(for: asset))
-            .flatMap { session, metadata -> Future<Bool, Error> in
+            .flatMap { session, metadata -> Future<URL, Error> in
 
                 // Set the metadata and start the export.
 
@@ -214,7 +226,7 @@ class Manager: NSObject, ObservableObject {
 
     }
 
-    func export(image asset: PHAsset, directoryUrl: URL, options: ExportOptions) -> AnyPublisher<Bool, Error> {
+    func export(image asset: PHAsset, directoryUrl: URL, options: ExportOptions) -> AnyPublisher<URL, Error> {
         return image(for: asset)
             .receive(on: DispatchQueue.global(qos: .background))
             .zip(metadata(for: asset))
@@ -239,7 +251,7 @@ class Manager: NSObject, ObservableObject {
                 }
 
                 try details.data.write(to: destinationUrl)
-                return true
+                return destinationUrl
             }
             .eraseToAnyPublisher()
     }

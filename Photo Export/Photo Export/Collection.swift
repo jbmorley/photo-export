@@ -8,30 +8,41 @@
 import Foundation
 import Photos
 
+enum CollectionType {
+    case album
+    case folder
+}
+
 class Collection: NSObject, ObservableObject, Identifiable {
 
     var id: String { collection.id }
+    var collectionType: CollectionType { collection.canContainAssets ? .album : .folder }
 
     @Published var assets: [PHAsset] = []
+    @Published var collections: [Collection]?
 
-    weak var manager: Manager?
-    var collection: PHAssetCollection
+    var localizedTitle: String { collection.localizedTitle ?? "Untitled" }
 
-    var localizedTitle: String {
-        collection.localizedTitle ?? "Untitled"
-    }
+    fileprivate weak var manager: Manager?
+    fileprivate var collection: PHCollection
 
-    init(manager: Manager, collection: PHAssetCollection) {
+    init(manager: Manager, collection: PHCollection) {
         self.manager = manager
         self.collection = collection
         super.init()
-
         PHPhotoLibrary.shared().register(self)
-        self.update()
+        update()
     }
 
     func update() {
+        updateAssets()
+        updateCollections()
+    }
 
+    func updateAssets() {
+        guard let collection = self.collection as? PHAssetCollection else {
+            return
+        }
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 
@@ -42,6 +53,20 @@ class Collection: NSObject, ObservableObject, Identifiable {
             assets.append(asset)
         }
         self.assets = assets
+    }
+
+    func updateCollections() {
+        guard let collection = self.collection as? PHCollectionList,
+              let manager = manager else {
+            return
+        }
+        var collections: [Collection] = []
+        let result = PHAssetCollection.fetchCollections(in: collection, options: nil)
+        result.enumerateObjects { collection, index, stop in
+            dispatchPrecondition(condition: .onQueue(.main))
+            collections.append(Collection(manager: manager, collection: collection))
+        }
+        self.collections = collections
     }
 
 }

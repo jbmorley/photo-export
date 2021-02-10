@@ -20,9 +20,14 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List {
-                    ForEach(manager.collections) { collection in
-                        NavigationLink(collection.localizedTitle, destination: CollectionView(manager: manager, collection: collection))
+                List(manager.collections, children: \.collections) { collection in
+                    NavigationLink(destination: CollectionView(manager: manager, collection: collection)) {
+                        switch collection.collectionType {
+                        case .album:
+                            Label(collection.localizedTitle, systemImage: "rectangle.stack")
+                        case .folder:
+                            Label(collection.localizedTitle, systemImage: "folder")
+                        }
                     }
                 }
             }

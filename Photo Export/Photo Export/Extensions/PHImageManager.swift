@@ -21,12 +21,16 @@ struct ExportSession {
 
 extension AVAssetExportSession {
 
-    func export() -> Future<Bool, Error> {
-        return Future<Bool, Error>.init { promise in
+    func export() -> Future<URL, Error> {
+        return Future<URL, Error>.init { promise in
             self.exportAsynchronously {
                 switch self.status {
                 case .completed:
-                    promise(.success(true))
+                    guard let url = self.outputURL else {
+                        promise(.failure(ManagerError.unknown))  // TODO: Process this better.
+                        return
+                    }
+                    promise(.success(url))
                 default:
                     promise(.failure(self.error ?? ManagerError.unknown))
                 }

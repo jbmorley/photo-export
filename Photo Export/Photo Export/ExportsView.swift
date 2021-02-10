@@ -25,7 +25,10 @@ struct ExportsView: View {
                                 .controlSize(.small)
                         } else if (task.isFinished) {
                             Button {
-                                print("Reveal in finder")
+                                guard let url = task.url else {
+                                    return
+                                }
+                                NSWorkspace.shared.activateFileViewerSelecting([url])
                             } label: {
                                 Image(systemName: "magnifyingglass.circle.fill")
                                     .foregroundColor(.secondary)
@@ -39,12 +42,13 @@ struct ExportsView: View {
             }
             Divider()
             Text("\(taskManager.tasks.count) Pending")
+                .foregroundColor(.secondary)
                 .padding()
         }
         .toolbar {
             ToolbarItem {
                 Button {
-
+                    taskManager.clear()
                 } label: {
                     Text("Clear")
                 }

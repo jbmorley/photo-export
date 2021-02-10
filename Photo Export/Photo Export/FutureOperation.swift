@@ -25,12 +25,12 @@ class FutureOperation: Task {
     override var isExecuting: Bool { running }
     override var isFinished: Bool { complete }
 
-    var block: () -> AnyPublisher<Bool, Error>
+    var block: () -> AnyPublisher<URL, Error>
     var cancellable: Cancellable?
     var running = false
     var complete = false
 
-    init(title: String, block: @escaping () -> AnyPublisher<Bool, Error>) {
+    init(title: String, block: @escaping () -> AnyPublisher<URL, Error>) {
         self.block = block
         super.init(title: title)
     }
@@ -38,10 +38,14 @@ class FutureOperation: Task {
     override func start() {
         running = true
         let sem = DispatchSemaphore(value: 0)
+        var url: URL?
         cancellable = block().sink(receiveCompletion: { result in
             sem.signal()
-        }, receiveValue: { _ in })
+        }, receiveValue: { result in
+            url = result
+        })
         sem.wait()
+        self.url = url
         complete = true
         running = false
     }
