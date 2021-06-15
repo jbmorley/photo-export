@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Photos
 
 extension Data {
 
@@ -20,7 +21,7 @@ extension Data {
         return CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any]
     }
 
-    func set(metadata: Metadata) throws -> Data {
+    func set(asset: PHAsset, metadata: Metadata) throws -> Data {
 
         guard let imageSource = imageSource else {
             throw ManagerError.invalidData
@@ -31,24 +32,41 @@ extension Data {
         }
 
         var mutableProperties = properties
-        if var mutableIPTC = (properties[(kCGImagePropertyIPTCDictionary as String)]) as? [AnyHashable: Any] {
-            if let title = metadata.title {
-                mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
-            }
-            if let caption = metadata.caption {
-                mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = caption
-            }
-            mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
-        } else {
-            var mutableIPTC: [AnyHashable: String] = [:]
-            if let title = metadata.title {
-                mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
-            }
-            if let caption = metadata.caption {
-                mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = caption
-            }
-            mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
+
+        var iptc = (properties[(kCGImagePropertyIPTCDictionary as String)]) as? [AnyHashable: Any] ?? [:]
+        if let title = metadata.title {
+            iptc[kCGImagePropertyIPTCObjectName as String] = title
         }
+        if let caption = metadata.caption {
+            iptc[kCGImagePropertyIPTCCaptionAbstract as String] = caption
+        }
+        mutableProperties[kCGImagePropertyIPTCDictionary] = iptc
+
+//        var exif = (properties[(kCGImagePropertyExifDictionary as String)]) as? [AnyHashable: Any] ?? [:]
+//        exif[kCGImagePropertyExifDateTimeOriginal] = asset.creationDate
+//        mutableProperties[kCGImagePropertyExifDictionary] = exif
+
+
+//        if var mutableIPTC = (properties[(kCGImagePropertyIPTCDictionary as String)]) as? [AnyHashable: Any] {
+//            if let title = metadata.title {
+//                iptc[kCGImagePropertyIPTCObjectName as String] = title
+//            }
+//            if let caption = metadata.caption {
+//                iptc[kCGImagePropertyIPTCCaptionAbstract as String] = caption
+//            }
+//            mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
+//        } else {
+//            var mutableIPTC: [AnyHashable: String] = [:]
+//            if let title = metadata.title {
+//                mutableIPTC[kCGImagePropertyIPTCObjectName as String] = title
+//            }
+//            if let caption = metadata.caption {
+//                mutableIPTC[kCGImagePropertyIPTCCaptionAbstract as String] = caption
+//            }
+//            mutableProperties[kCGImagePropertyIPTCDictionary] = mutableIPTC
+//        }
+//        mutableProperties[kCGImagePropertyIPTCDictionary] = iptc
+
 
         guard let uti = CGImageSourceGetType(imageSource) else {
             throw ManagerError.unknownImageType

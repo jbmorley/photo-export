@@ -121,6 +121,7 @@ class Manager: NSObject, ObservableObject {
         }
     }
 
+    // TODO: Move this to the asset manager
     func image(for asset: PHAsset) -> Future<AssetDetails, Error> {
         return Future<AssetDetails, Error> { promise in
             DispatchQueue.global(qos: .background).async {
@@ -231,7 +232,7 @@ class Manager: NSObject, ObservableObject {
             .receive(on: DispatchQueue.global(qos: .background))
             .zip(metadata(for: asset))
             .tryMap { details, metadata -> AssetDetails in
-                return details.set(data: try details.data.set(metadata: metadata))
+                return details.set(data: try details.data.set(asset: asset, metadata: metadata))
             }
             .tryMap { details in
                 guard let pathExtension = details.fileExtension else {

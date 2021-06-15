@@ -8,35 +8,10 @@
 import Combine
 import Photos
 
-
-// TODO: A cancellable future would be great. Is this just a single yielding promise?
-
-
 struct ExportSession {
 
     let session: AVAssetExportSession
     let info: [AnyHashable : Any]
-
-}
-
-extension AVAssetExportSession {
-
-    func export() -> Future<URL, Error> {
-        return Future<URL, Error>.init { promise in
-            self.exportAsynchronously {
-                switch self.status {
-                case .completed:
-                    guard let url = self.outputURL else {
-                        promise(.failure(ManagerError.unknown))  // TODO: Process this better.
-                        return
-                    }
-                    promise(.success(url))
-                default:
-                    promise(.failure(self.error ?? ManagerError.unknown))
-                }
-            }
-        }
-    }
 
 }
 
@@ -57,5 +32,3 @@ extension PHImageManager {
     }
 
 }
-
-

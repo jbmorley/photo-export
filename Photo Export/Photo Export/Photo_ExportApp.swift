@@ -23,5 +23,10 @@ struct Photo_ExportApp: App {
             ExportsView(manager: manager, taskManager: manager.taskManager)
                 .preferredColorScheme(.dark)
         }
+        Settings {
+            SettingsView()
+                .environment(\.manager, manager)
+                .preferredColorScheme(.dark)
+        }
     }
 }
