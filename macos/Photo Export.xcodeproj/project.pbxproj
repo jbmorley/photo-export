@@ -11,6 +11,9 @@
 		D8080F6625CA06A600E2511D /* Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8080F6525CA06A600E2511D /* Thumbnail.swift */; };
 		D8080F6E25CA09A500E2511D /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8080F6D25CA09A500E2511D /* PhotoLibrary.swift */; };
 		D8092DD625DCDC270050C74B /* AVAssetExportSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8092DD525DCDC270050C74B /* AVAssetExportSession.swift */; };
+		D85659712678E9D70067BC23 /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D856596E2678E9D70067BC23 /* Common.xcconfig */; };
+		D85659722678E9D70067BC23 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D856596F2678E9D70067BC23 /* Debug.xcconfig */; };
+		D85659732678E9D70067BC23 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D85659702678E9D70067BC23 /* Release.xcconfig */; };
 		D85D2E1725D7E348002AA104 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85D2E1625D7E348002AA104 /* SettingsView.swift */; };
 		D88D65BA25C5F6990002D434 /* Photo_ExportApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65B925C5F6990002D434 /* Photo_ExportApp.swift */; };
 		D88D65BC25C5F6990002D434 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88D65BB25C5F6990002D434 /* ContentView.swift */; };
@@ -57,6 +60,9 @@
 		D8080F6525CA06A600E2511D /* Thumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Thumbnail.swift; sourceTree = "<group>"; };
 		D8080F6D25CA09A500E2511D /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
 		D8092DD525DCDC270050C74B /* AVAssetExportSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetExportSession.swift; sourceTree = "<group>"; };
+		D856596E2678E9D70067BC23 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
+		D856596F2678E9D70067BC23 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		D85659702678E9D70067BC23 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D85D2E1625D7E348002AA104 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D88D65B625C5F6990002D434 /* Photo Export.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Photo Export.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D88D65B925C5F6990002D434 /* Photo_ExportApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo_ExportApp.swift; sourceTree = "<group>"; };
@@ -132,6 +138,9 @@
 		D88D65AD25C5F6990002D434 = {
 			isa = PBXGroup;
 			children = (
+				D856596E2678E9D70067BC23 /* Common.xcconfig */,
+				D856596F2678E9D70067BC23 /* Debug.xcconfig */,
+				D85659702678E9D70067BC23 /* Release.xcconfig */,
 				D88D65B825C5F6990002D434 /* Photo Export */,
 				D88D65CB25C5F69B0002D434 /* Photo ExportTests */,
 				D88D65D625C5F69B0002D434 /* Photo ExportUITests */,
@@ -306,9 +315,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D85659712678E9D70067BC23 /* Common.xcconfig in Resources */,
 				D88D65C125C5F69A0002D434 /* Preview Assets.xcassets in Resources */,
+				D85659722678E9D70067BC23 /* Debug.xcconfig in Resources */,
 				D8DA437025D330940015F6FB /* Localizable.strings in Resources */,
 				D88D65BE25C5F69A0002D434 /* Assets.xcassets in Resources */,
+				D85659732678E9D70067BC23 /* Release.xcconfig in Resources */,
 				D8DA437625D330B20015F6FB /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -527,12 +539,14 @@
 		};
 		D88D65DD25C5F69B0002D434 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D856596F2678E9D70067BC23 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Photo Export/Photo_Export.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_ASSET_PATHS = "\"Photo Export/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -551,6 +565,7 @@
 		};
 		D88D65DE25C5F69B0002D434 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D85659702678E9D70067BC23 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -558,6 +573,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = $BUILD_NUMBER;
 				DEVELOPMENT_ASSET_PATHS = "\"Photo Export/Preview Content\"";
 				DEVELOPMENT_TEAM = S4WXAUZQEV;
 				ENABLE_HARDENED_RUNTIME = YES;
