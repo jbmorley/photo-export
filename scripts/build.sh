@@ -98,17 +98,6 @@ cd "$ROOT_DIRECTORY"
 # List the available schemes.
 xcode_project -list
 
-# Smoke test builds.
-
-# FileawayCore
-# build_scheme "FileawayCore iOS" clean build build-for-testing test \
-#     -sdk iphonesimulator \
-#     -destination "$IPHONE_DESTINATION"
-# build_scheme "FileawayCore macOS" clean build build-for-testing test
-
-# Apps
-# build_scheme "Fileaway iOS" clean build
-
 # Build the macOS archive.
 
 # Clean up the build directory.
