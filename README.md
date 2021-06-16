@@ -2,6 +2,8 @@
 
 macOS utility for exporting photos from Apple Photos.
 
+![Screenshot of the main window on macOS](screenshots/macos.png)
+
 ## Development
 
 ### Managing Certificates
