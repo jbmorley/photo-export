@@ -1,0 +1,25 @@
+{
+  "systemImage" : "rectangle.righthalf.inset.filled.arrow.right",
+  "topColor" : {
+    "red" : 1,
+    "alpha" : 1,
+    "blue" : 0,
+    "green" : 0.57810515169999999
+  },
+  "iconScale" : 0.85956860522290213,
+  "id" : "CBB20DC5-CEB1-4198-9133-23D72EE3DFFB",
+  "symbolColor" : {
+    "red" : 1,
+    "alpha" : 1,
+    "blue" : 1,
+    "green" : 1
+  },
+  "shadowOpacity" : 0.21375143411276226,
+  "shadowHeight" : 0.21850654228583921,
+  "bottomColor" : {
+    "red" : 1,
+    "alpha" : 1,
+    "blue" : 0,
+    "green" : 0.14913141730000001
+  }
+}
