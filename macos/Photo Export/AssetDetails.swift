@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 import Foundation
+import ImageIO
 
 struct AssetDetails {
     let data: Data
