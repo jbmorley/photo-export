@@ -155,6 +155,8 @@ codesign -dvv "$APP_PATH"
 # Notarize the release build.
 if $NOTARIZE ; then
     fastlane notarize_release package:"$APP_PATH"
+    # https://github.com/fastlane/fastlane/issues/19686#issuecomment-1026403378
+    FL_NOTARIZE_ASC_PROVIDER="S4WXAUZQEV" fastlane notarize_release package:"$APP_PATH"
 fi
 
 # Archive the results.
