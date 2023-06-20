@@ -4,6 +4,8 @@ macOS utility for exporting photos from Apple Photos.
 
 ![Screenshot of the main window on macOS](screenshots/macos.png)
 
+**Note: This project has been archived and will not be developed further. It was a great opportunity for me to learn about SwiftUI and was the primary way I published photos to my [website](https://jbmorley.co.uk) for quite a while, but it no longer makes sense to maintain it. I still hope to revisit the problem of backing up iCloud Photo Library data in the future, but 'Photo Export' isn't the right tool for that.**
+
 ## Development
 
 ### Managing Certificates
